@@ -3,56 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>福彩综合站 | 极客与奢华重塑版</title>
-    
-    <link href="https://fonts.geekzu.org/css2?family=Outfit:wght@300;500;800;900&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+    <title>福彩玩法明细</title>
     
     <style>
         /* ==================== 全局变量 ==================== */
         :root {
-            /* 玻璃拟态主题变量 */
-            --bg-obsidian: #050507;
-            --glass-bg: rgba(20, 20, 25, 0.4);
-            --glass-border: rgba(255, 255, 255, 0.05);
-            --text-primary: #ffffff;
-            --text-muted: #8a8a93;
-            --gold-accent: #d4af37;
-            --gold-glow: rgba(212, 175, 55, 0.3);
-            --red-sphere: linear-gradient(135deg, #ff2a54 0%, #ff0844 100%);
-            --blue-sphere: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
-            --font-cn: 'ZCOOL XiaoWei', serif;
-            --font-num: 'Outfit', sans-serif;
-
+            /* 底部导航栏颜色 */
+            --nav-bg: #1a1a1a;
+            --nav-text: #8a8a93;
+            --nav-active: #ffd700;
+            
             /* 海报主题变量 */
             --lucky-red: #da251d;
             --dark-red: #a11312;
             --gold: #ffd700;
             --pure-yellow: #FFFF00;
             --light-gold: #fffde7;
+            --text-dark: #111111;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            background-color: var(--bg-obsidian);
-            font-family: var(--font-num);
+            background-color: #111;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
         }
 
         /* 视图切换控制 */
-        .page-view { display: none; width: 100%; min-height: 100vh; padding-bottom: 80px; }
-        .page-view.active { display: flex; flex-direction: column; align-items: center; }
+        .page-view { 
+            display: none; 
+            width: 100%; 
+            min-height: 100vh; 
+            padding-bottom: 90px; /* 为底部导航栏留出空间 */
+        }
+        .page-view.active { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
 
         /* ==================== 底部导航栏 ==================== */
         .bottom-nav {
             position: fixed;
             bottom: 0; left: 0; right: 0;
-            height: 70px;
-            background: rgba(10, 10, 15, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid var(--glass-border);
+            height: 65px;
+            background: var(--nav-bg);
+            border-top: 1px solid #333;
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -61,149 +59,258 @@
         }
 
         .nav-item {
-            color: var(--text-muted);
-            font-family: var(--font-cn);
-            font-size: 0.9rem;
+            color: var(--nav-text);
+            font-size: 0.85rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 4px;
             cursor: pointer;
             transition: all 0.3s ease;
-            padding: 10px;
+            padding: 10px 20px;
+            font-weight: bold;
         }
 
         .nav-item .icon { font-size: 1.4rem; filter: grayscale(100%) opacity(0.6); transition: all 0.3s; }
-        
-        .nav-item.active { color: var(--gold-accent); text-shadow: 0 0 10px var(--gold-glow); }
+        .nav-item.active { color: var(--nav-active); }
         .nav-item.active .icon { filter: grayscale(0%) opacity(1); transform: translateY(-2px); }
 
-        /* ==================== 模块一：开奖公告 (原玻璃拟态风) ==================== */
-        #view-results { padding-top: 4rem; color: var(--text-primary); position: relative; }
-        
-        /* 环境光效仅在开奖页面生效 */
-        #view-results .ambient-light {
-            position: absolute; border-radius: 50%; filter: blur(120px); z-index: -1; opacity: 0.5;
-            animation: breathe 8s infinite alternate ease-in-out;
-        }
-        .light-1 { top: -10vw; left: -10vw; width: 50vw; height: 50vw; background: rgba(255, 8, 68, 0.15); }
-        .light-2 { bottom: -10vw; right: -10vw; width: 40vw; height: 40vw; background: rgba(0, 198, 255, 0.15); animation-delay: -4s; }
-        .light-3 { top: 40%; left: 50%; transform: translate(-50%, -50%); width: 30vw; height: 30vw; background: rgba(212, 175, 55, 0.1); }
-
-        /* 噪点背景 */
-        .noise-bg {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+        /* ==================== 海报视图通用样式 ==================== */
+        .poster-container { 
+            background: linear-gradient(135deg, var(--lucky-red) 0%, #c62828 100%); 
+            width: 96%; 
+            max-width: 420px; 
+            border: 2px double var(--gold); 
+            border-radius: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.8); 
+            position: relative; 
+            overflow: hidden; 
+            margin-top: 10px;
+            margin-bottom: 20px;
+            padding: 20px 4px 8px 4px;
         }
 
-        #view-results header { text-align: center; margin-bottom: 3rem; z-index: 2; }
-        .main-title { font-family: var(--font-cn); font-size: 3rem; font-weight: 400; letter-spacing: 6px; background: linear-gradient(to right, #fff, #a3a3b5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
-        .sys-date { font-family: var(--font-cn); font-size: 1rem; color: var(--gold-accent); letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid rgba(212, 175, 55, 0.3); padding-bottom: 0.5rem; display: inline-block; }
-        
-        .board-grid { width: 100%; max-width: 1200px; padding: 0 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; z-index: 2; }
-        .glass-card { background: var(--glass-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 2rem; position: relative; overflow: hidden; opacity: 0; transform: translateY(30px); transition: all 0.5s; }
-        .card-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem; }
-        .lottery-name { font-family: var(--font-cn); font-size: 2rem; font-weight: bold; line-height: 1; }
-        .issue-badge { background: rgba(212, 175, 55, 0.15); color: var(--gold-accent); padding: 0.3rem 0.8rem; border-radius: 100px; font-size: 0.8rem; font-weight: 800; border: 1px solid rgba(212, 175, 55, 0.3); }
-        .meta-info { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem; font-family: var(--font-cn); }
-        .meta-info .highlight { color: #fff; font-family: var(--font-num); font-weight: 300; }
-        
-        .balls-container { display: flex; flex-wrap: wrap; gap: 0; transition: gap 0.4s ease; }
-        .glass-card:hover .balls-container { gap: 6px; }
-        .glass-card:hover .ball { margin-left: 0 !important; }
-        .ball { width: 44px; height: 44px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; font-weight: 900; color: #fff; position: relative; margin-left: -10px; transition: all 0.4s; box-shadow: -4px 0 10px rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.1); }
-        .ball:first-child { margin-left: 0; }
-        .ball.red { background: var(--red-sphere); box-shadow: -4px 0 10px rgba(0,0,0,0.4), inset 0 0 15px rgba(0,0,0,0.2); }
-        .ball.blue { background: var(--blue-sphere); box-shadow: -4px 0 10px rgba(0,0,0,0.4), inset 0 0 15px rgba(0,0,0,0.2); }
-        .ball.blue:first-of-type { margin-left: 12px; }
+        .poster-container::before { 
+            content: "💰"; position: absolute; font-size: 15rem; color: rgba(255, 215, 0, 0.04); 
+            top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); 
+            pointer-events: none; z-index: 0; 
+        }
 
-        @keyframes breathe { from { transform: scale(1); opacity: 0.4; } to { transform: scale(1.1); opacity: 0.6; } }
-
-        /* ==================== 模块二：海报视图通用样式 (作用于原3个页面) ==================== */
-        .poster-theme { background: #111; color: #333; font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; padding-top: 10px; }
-        .poster-container { background: linear-gradient(135deg, var(--lucky-red) 0%, #c62828 100%); width: 95%; max-width: 420px; border: 2px double var(--gold); border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.8); position: relative; overflow: hidden; margin-bottom: 20px; }
-        .poster-container::before { content: "💰"; position: absolute; font-size: 15rem; color: rgba(255, 215, 0, 0.04); top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); pointer-events: none; z-index: 0; }
         .poster-container > * { position: relative; z-index: 1; }
-        .poster-header-title { text-align: center; margin-bottom: 15px; margin-top: 15px;}
-        .poster-header-title h1 { font-size: 1.6rem; font-weight: 900; color: var(--gold); letter-spacing: 2px; margin: 0; text-shadow: 0 2px 0 #b71c1c; }
         
-        .section-card { background: #fff; border: 2px solid var(--gold); border-radius: 6px; margin: 0 4px 16px 4px; padding: 18px 2px 2px 2px; position: relative; }
-        .section-header { background: linear-gradient(to right, #d32f2f, #f44336, #d32f2f); color: var(--gold); padding: 2px 15px; border-radius: 4px 4px 0 0; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); font-size: 1rem; font-weight: 900; letter-spacing: 2px; border: 1px solid var(--gold); box-shadow: 0 1px 3px rgba(0,0,0,0.3); white-space: nowrap; }
+        .header-title { text-align: center; margin-bottom: 20px; }
+        .header-title h1 { 
+            font-size: 1.6rem; font-weight: 900; color: var(--gold); 
+            letter-spacing: 2px; margin: 0; text-shadow: 0 2px 0 #b71c1c; 
+        }
+        
+        .section-card { 
+            background: #fff; border: 2px solid var(--gold); border-radius: 6px; 
+            margin-bottom: 20px; padding: 20px 2px 2px 2px; position: relative; 
+        }
+
+        .section-header { 
+            background: linear-gradient(to right, #d32f2f, #f44336, #d32f2f); 
+            color: var(--gold); padding: 4px 20px; border-radius: 4px 4px 0 0; 
+            position: absolute; top: -14px; left: 50%; transform: translateX(-50%); 
+            font-size: 1.05rem; font-weight: 900; letter-spacing: 2px; 
+            border: 1px solid var(--gold); box-shadow: 0 1px 3px rgba(0,0,0,0.3); 
+            white-space: nowrap; text-align: center;
+        }
         
         .rule-container { text-align: center; margin-top: 2px; margin-bottom: 6px; }
-        .rule-explanation { display: inline-block; background: var(--pure-yellow); color: var(--lucky-red); font-size: 0.8rem; font-weight: 900; padding: 2px 8px; border-radius: 4px; border: 2px solid #000; letter-spacing: 0.5px; white-space: nowrap; animation: pulse-glow 1.5s infinite ease-in-out;}
-        @keyframes pulse-glow { 0% { box-shadow: 0 0 2px var(--pure-yellow); } 50% { box-shadow: 0 0 8px var(--pure-yellow); } 100% { box-shadow: 0 0 2px var(--pure-yellow); } }
+        .rule-explanation { 
+            display: inline-block; background: var(--pure-yellow); color: var(--lucky-red); 
+            font-size: 0.8rem; font-weight: 900; padding: 2px 8px; border-radius: 4px; 
+            border: 2px solid #000; letter-spacing: 0.5px; white-space: nowrap; 
+            animation: pulse-glow 1.5s infinite ease-in-out;
+        }
 
-        .poster-theme table { width: 100%; border-collapse: collapse; background: var(--light-gold); border: 1px solid #ffca28; table-layout: fixed; }
-        .poster-theme th { background: var(--gold); color: var(--dark-red); font-weight: 900; font-size: 0.8rem; padding: 4px 1px; border-bottom: 1px solid #f57c00; border-right: 1px solid #f57c00; }
-        .poster-theme td { padding: 3px 1px; text-align: center; border-bottom: 1px solid #f57c00; border-right: 1px solid #f57c00; font-weight: 800; background-color: #fffde7; font-size: 0.9rem;}
-        .poster-theme tr:nth-child(even) td { background-color: #fff9c4; }
-        .poster-theme th:last-child, .poster-theme td:last-child { border-right: none; }
+        @keyframes pulse-glow { 
+            0% { box-shadow: 0 0 2px var(--pure-yellow); } 
+            50% { box-shadow: 0 0 8px var(--pure-yellow); } 
+            100% { box-shadow: 0 0 2px var(--pure-yellow); } 
+        }
+
+        table { width: 100%; border-collapse: collapse; background: var(--light-gold); border: 1px solid #ffca28; table-layout: fixed; }
+        th { 
+            background: var(--gold); color: var(--dark-red); font-weight: 900; 
+            font-size: 0.85rem; padding: 4px 1px; border-bottom: 2px solid #f57c00; 
+            border-right: 1px solid #f57c00; line-height: 1.1; 
+        }
+        td { 
+            padding: 3px 1px; text-align: center; border-bottom: 1px dashed #f57c00; 
+            border-right: 1px solid #f57c00; font-weight: 800; background-color: #fffde7; 
+            font-size: 0.95rem; line-height: 1.2; color: var(--text-dark);
+        }
+        tr:nth-child(even) td { background-color: #fff9c4; }
+        th:last-child, td:last-child { border-right: none; }
         
         .price-col { color: #1b5e20; }
         .reward-col { color: var(--lucky-red); font-size: 1.05rem; font-weight: 900; }
 
-        /* 双色球特有样式 */
-        .type-col { font-family: 'Arial Black', sans-serif;}
-        .detail-col { text-align: left !important; font-size: 0.68rem !important; line-height: 1.2; padding: 3px 4px !important; }
+        /* ==================== 双色球特有排版 ==================== */
+        .ssq-table td { padding: 2px 1px; vertical-align: middle; }
+        .type-col { font-size: 0.95rem; font-family: 'Arial Black', sans-serif;}
+        .detail-col { 
+            text-align: left !important; font-size: 0.68rem; font-weight: 700; 
+            line-height: 1.15; padding: 3px 4px !important; letter-spacing: -0.2px; 
+        }
         .prize-item { display: inline-block; white-space: nowrap; margin-right: 4px; margin-bottom: 1px; }
         .detail-col .r-val { color: var(--lucky-red); font-size: 0.72rem; font-weight: 900; margin: 0 1px; }
-
     </style>
 </head>
 <body>
 
-    <div id="view-results" class="page-view active">
-        <div class="noise-bg"></div>
-        <div class="ambient-light light-1"></div>
-        <div class="ambient-light light-2"></div>
-        <div class="ambient-light light-3"></div>
-
-        <header>
-            <h1 class="main-title">福利彩票公告</h1>
-            <div class="sys-date" id="systemDate">CALCULATING ALIGNMENT...</div>
-        </header>
-        <main class="board-grid" id="lotteryBoard"></main>
-    </div>
-
-    <div id="view-ssq" class="page-view poster-theme">
+    <div id="view-ssq" class="page-view active">
         <div class="poster-container">
-            <div class="poster-header-title"><h1>双色球复式明细</h1></div>
+            <div class="header-title"><h1>双色球复式玩法明细</h1></div>
+
             <div class="section-card">
                 <div class="section-header">双色球复式奖金对照</div>
-                <table>
-                    <thead><tr><th width="12%">投注</th><th width="15%">投入</th><th width="73%">中奖详情</th></tr></thead>
+                <table class="ssq-table">
+                    <thead>
+                        <tr><th width="12%">投注</th><th width="15%">投入</th><th width="73%">中奖详情</th></tr>
+                    </thead>
                     <tbody>
                         <tr>
                             <td class="type-col">7+1</td><td class="price-col">14元</td>
                             <td class="detail-col">
-                                <span class="prize-item">中蓝球<span class="r-val">35元</span></span> <span class="prize-item">中3+1<span class="r-val">55元</span></span>
-                                <span class="prize-item">中4+1<span class="r-val">640元</span></span> <span class="prize-item">中5+1<span class="r-val">7000元</span></span>
+                                <span class="prize-item">中蓝球<span class="r-val">35元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">20元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">55元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">30元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">640元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">450元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">7000元</span></span>
+                                <span class="prize-item">中6+0 1个二等奖<span class="r-val">+1200元</span></span>
                                 <span class="prize-item">中6+1 1个一等奖<span class="r-val">+18000元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">7+2</td><td class="price-col">28元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中蓝球<span class="r-val">35元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">40元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">55元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">60元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">670元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">900元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">7450元</span></span>
+                                <span class="prize-item">中6+0 2个二等奖<span class="r-val">+2400元</span></span>
+                                <span class="prize-item">中6+1 1个一等+1个二等<span class="r-val">+19200元</span></span>
                             </td>
                         </tr>
                         <tr>
                             <td class="type-col">8+1</td><td class="price-col">56元</td>
                             <td class="detail-col">
-                                <span class="prize-item">中蓝球<span class="r-val">140元</span></span> <span class="prize-item">中3+1<span class="r-val">190元</span></span>
-                                <span class="prize-item">中4+1<span class="r-val">1390元</span></span> <span class="prize-item">中5+1<span class="r-val">12100元</span></span>
+                                <span class="prize-item">中蓝球<span class="r-val">140元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">50元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">190元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">60元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">1390元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">750元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">12100元</span></span>
+                                <span class="prize-item">中6+0 1个二等奖<span class="r-val">+2550元</span></span>
                                 <span class="prize-item">中6+1 1个一等奖<span class="r-val">+39000元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">8+2</td><td class="price-col">112元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中蓝球<span class="r-val">140元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">100元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">190元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">120元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">1450元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">1500元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">12850元</span></span>
+                                <span class="prize-item">中6+0 2个二等奖<span class="r-val">+5100元</span></span>
+                                <span class="prize-item">中6+1 1个一等+1个二等<span class="r-val">+41550元</span></span>
                             </td>
                         </tr>
                         <tr>
                             <td class="type-col">9+1</td><td class="price-col">168元</td>
                             <td class="detail-col">
-                                <span class="prize-item">中蓝球<span class="r-val">420元</span></span> <span class="prize-item">中3+1<span class="r-val">520元</span></span>
-                                <span class="prize-item">中4+1<span class="r-val">2570元</span></span> <span class="prize-item">中5+1<span class="r-val">18450元</span></span>
+                                <span class="prize-item">中蓝球<span class="r-val">420元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">100元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">520元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">100元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">2570元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">1100元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">18450元</span></span>
+                                <span class="prize-item">中6+0 1个二等奖<span class="r-val">+4050元</span></span>
                                 <span class="prize-item">中6+1 1个一等奖<span class="r-val">+63200元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">9+2</td><td class="price-col">336元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中蓝球<span class="r-val">420元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">200元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">520元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">200元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">2670元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">2200元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">19550元</span></span>
+                                <span class="prize-item">中6+0 2个二等奖<span class="r-val">+8100元</span></span>
+                                <span class="prize-item">中6+1 1个一等+1个二等<span class="r-val">+67250元</span></span>
                             </td>
                         </tr>
                         <tr>
                             <td class="type-col">10+1</td><td class="price-col">420元</td>
                             <td class="detail-col">
-                                <span class="prize-item">中蓝球<span class="r-val">1050元</span></span> <span class="prize-item">中3+1<span class="r-val">1225元</span></span>
-                                <span class="prize-item">中4+1<span class="r-val">4375元</span></span> <span class="prize-item">中5+1<span class="r-val">26275元</span></span>
+                                <span class="prize-item">中蓝球<span class="r-val">1050元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">175元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">1225元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">150元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">4375元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">1500元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">26275元</span></span>
+                                <span class="prize-item">中6+0 1个二等奖<span class="r-val">+5700元</span></span>
                                 <span class="prize-item">中6+1 1个一等奖<span class="r-val">+90875元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">10+2</td><td class="price-col">840元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中蓝球<span class="r-val">1050元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">350元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">1225元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">300元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">4525元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">3000元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">27775元</span></span>
+                                <span class="prize-item">中6+0 2个二等奖<span class="r-val">+11400元</span></span>
+                                <span class="prize-item">中6+1 1个一等+1个二等<span class="r-val">+96575元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">11+1</td><td class="price-col">924元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中蓝球<span class="r-val">2310元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">280元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">2590元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">210元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">7105元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">1950元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">35905元</span></span>
+                                <span class="prize-item">中6+0 1个二等奖<span class="r-val">+7500元</span></span>
+                                <span class="prize-item">中6+1 1个一等奖<span class="r-val">+122405元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">11+2</td><td class="price-col">1848元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中蓝球<span class="r-val">2310元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">560元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">2590元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">420元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">7315元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">3900元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">37855元</span></span>
+                                <span class="prize-item">中6+0 2个二等奖<span class="r-val">+15000元</span></span>
+                                <span class="prize-item">中6+1 1个一等+1个二等<span class="r-val">+129905元</span></span>
                             </td>
                         </tr>
                     </tbody>
@@ -212,51 +319,82 @@
         </div>
     </div>
 
-    <div id="view-3d-dan" class="page-view poster-theme">
-        <div class="poster-container" style="padding-top:20px;">
-            <div class="poster-header-title"><h1>福彩3D 包串明细</h1></div>
+    <div id="view-3d-dan" class="page-view">
+        <div class="poster-container">
+            <div class="header-title"><h1>福彩3D 包串玩法明细</h1></div>
             
             <div class="section-card">
                 <div class="section-header">单选玩法</div>
                 <div class="rule-container"><div class="rule-explanation">【 包串投注 即3个不同的号 】</div></div>
                 <table>
-                    <thead><tr><th width="33%">单选包串</th><th width="33%">投入(元)</th><th width="34%">单选奖金</th></tr></thead>
+                    <thead>
+                        <tr><th width="33%">单选包串</th><th width="33%">投入(元)</th><th width="34%">单选奖金(元)</th></tr>
+                    </thead>
                     <tbody>
                         <tr><td>3码复式</td><td class="price-col">12</td><td class="reward-col">1040</td></tr>
                         <tr><td>4码复式</td><td class="price-col">48</td><td class="reward-col">1040</td></tr>
                         <tr><td>5码复式</td><td class="price-col">120</td><td class="reward-col">1040</td></tr>
                         <tr><td>6码复式</td><td class="price-col">240</td><td class="reward-col">1040</td></tr>
                         <tr><td>7码复式</td><td class="price-col">420</td><td class="reward-col">1040</td></tr>
+                        <tr><td>8码复式</td><td class="price-col">672</td><td class="reward-col">1040</td></tr>
+                        <tr><td>9码复式</td><td class="price-col">1008</td><td class="reward-col">1040</td></tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="section-card">
-                <div class="section-header">组选六 / 组选三</div>
-                <div class="rule-container"><div class="rule-explanation">【 组三即对子 / 组六即三不同 】</div></div>
+                <div class="section-header">组选六</div>
+                <div class="rule-container"><div class="rule-explanation">【 包串投注 即3个不同的号 】</div></div>
                 <table>
-                    <thead><tr><th width="33%">复式包串</th><th width="33%">组六投入</th><th width="34%">组三投入</th></tr></thead>
+                    <thead>
+                        <tr><th width="33%">组六包串</th><th width="33%">投入(元)</th><th width="34%">组六奖金(元)</th></tr>
+                    </thead>
                     <tbody>
-                        <tr><td>4码复式</td><td class="price-col">8元</td><td class="price-col">24元</td></tr>
-                        <tr><td>5码复式</td><td class="price-col">20元</td><td class="price-col">40元</td></tr>
-                        <tr><td>6码复式</td><td class="price-col">40元</td><td class="price-col">60元</td></tr>
-                        <tr><td>7码复式</td><td class="price-col">70元</td><td class="price-col">84元</td></tr>
-                        <tr><td>8码复式</td><td class="price-col">112元</td><td class="price-col">112元</td></tr>
+                        <tr><td>3码单式</td><td class="price-col">2</td><td class="reward-col">173</td></tr>
+                        <tr><td>4码复式</td><td class="price-col">8</td><td class="reward-col">173</td></tr>
+                        <tr><td>5码复式</td><td class="price-col">20</td><td class="reward-col">173</td></tr>
+                        <tr><td>6码复式</td><td class="price-col">40</td><td class="reward-col">173</td></tr>
+                        <tr><td>7码复式</td><td class="price-col">70</td><td class="reward-col">173</td></tr>
+                        <tr><td>8码复式</td><td class="price-col">112</td><td class="reward-col">173</td></tr>
+                        <tr><td>9码复式</td><td class="price-col">168</td><td class="reward-col">173</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section-card" style="margin-bottom: 2px;">
+                <div class="section-header">组选三</div>
+                <div class="rule-container"><div class="rule-explanation">【 包串投注 即对子玩法 】</div></div>
+                <table>
+                    <thead>
+                        <tr><th width="33%">组三包串</th><th width="33%">投入(元)</th><th width="34%">组三奖金(元)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>2码复式</td><td class="price-col">4</td><td class="reward-col">346</td></tr>
+                        <tr><td>3码复式</td><td class="price-col">12</td><td class="reward-col">346</td></tr>
+                        <tr><td>4码复式</td><td class="price-col">24</td><td class="reward-col">346</td></tr>
+                        <tr><td>5码复式</td><td class="price-col">40</td><td class="reward-col">346</td></tr>
+                        <tr><td>6码复式</td><td class="price-col">60</td><td class="reward-col">346</td></tr>
+                        <tr><td>7码复式</td><td class="price-col">84</td><td class="reward-col">346</td></tr>
+                        <tr><td>8码复式</td><td class="price-col">112</td><td class="reward-col">346</td></tr>
+                        <tr><td>9码复式</td><td class="price-col">144</td><td class="reward-col">346</td></tr>
+                        <tr><td>10码复式</td><td class="price-col">180</td><td class="reward-col">346</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <div id="view-3d-tuo" class="page-view poster-theme">
-        <div class="poster-container" style="padding-top:20px;">
-            <div class="poster-header-title"><h1>3D 胆拖明细</h1></div>
+    <div id="view-3d-tuo" class="page-view">
+        <div class="poster-container">
+            <div class="header-title"><h1>3D 胆拖玩法明细</h1></div>
             
             <div class="section-card">
                 <div class="section-header">单选单胆拖</div>
                 <div class="rule-container"><div class="rule-explanation">【 含对子 】</div></div>
                 <table>
-                    <thead><tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">单选奖金</th></tr></thead>
+                    <thead>
+                        <tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">单选奖金(元)</th></tr>
+                    </thead>
                     <tbody>
                         <tr><td>1胆全拖</td><td class="price-col">542</td><td class="reward-col">1040</td></tr>
                         <tr><td>2胆全拖</td><td class="price-col">108</td><td class="reward-col">1040</td></tr>
@@ -265,10 +403,26 @@
             </div>
 
             <div class="section-card">
+                <div class="section-header">单选单胆拖</div>
+                <div class="rule-container"><div class="rule-explanation">【 不含对子 】</div></div>
+                <table>
+                    <thead>
+                        <tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">单选奖金(元)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1胆全拖</td><td class="price-col">432</td><td class="reward-col">1040</td></tr>
+                        <tr><td>2胆全拖</td><td class="price-col">96</td><td class="reward-col">1040</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section-card">
                 <div class="section-header">单选双胆拖</div>
                 <div class="rule-container"><div class="rule-explanation">【 即是对子 不含3个号不同 】</div></div>
                 <table>
-                    <thead><tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">单选奖金</th></tr></thead>
+                    <thead>
+                        <tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">单选奖金(元)</th></tr>
+                    </thead>
                     <tbody>
                         <tr><td>1胆全拖</td><td class="price-col">108</td><td class="reward-col">1040</td></tr>
                         <tr><td>2胆全拖</td><td class="price-col">48</td><td class="reward-col">1040</td></tr>
@@ -276,13 +430,30 @@
                 </table>
             </div>
             
-             <div class="section-card">
-                <div class="section-header">组选六 / 组选三</div>
+            <div class="section-card">
+                <div class="section-header">组选六</div>
+                <div class="rule-container"><div class="rule-explanation">【 即是三个号码不同 】</div></div>
                 <table>
-                    <thead><tr><th width="34%">全拖玩法</th><th width="33%">组六投入</th><th width="33%">组三投入</th></tr></thead>
+                    <thead>
+                        <tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">组六奖金(元)</th></tr>
+                    </thead>
                     <tbody>
-                        <tr><td>1胆全拖</td><td class="price-col">72</td><td class="price-col">36</td></tr>
-                        <tr><td>2胆全拖</td><td class="price-col">16</td><td class="price-col">18</td></tr>
+                        <tr><td>1胆全拖</td><td class="price-col">72</td><td class="reward-col">173</td></tr>
+                        <tr><td>2胆全拖</td><td class="price-col">16</td><td class="reward-col">173</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section-card" style="margin-bottom: 2px;">
+                <div class="section-header">组选三</div>
+                <div class="rule-container"><div class="rule-explanation">【 即是对子 不含3个号不同 】</div></div>
+                <table>
+                    <thead>
+                        <tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">组三奖金(元)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1胆全拖</td><td class="price-col">36</td><td class="reward-col">346</td></tr>
+                        <tr><td>2胆全拖</td><td class="price-col">18</td><td class="reward-col">346</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -290,21 +461,17 @@
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-item active" onclick="switchTab('view-results', this)">
-            <span class="icon">🔮</span>
-            <span>开奖结果</span>
-        </div>
-        <div class="nav-item" onclick="switchTab('view-ssq', this)">
+        <div class="nav-item active" onclick="switchTab('view-ssq', this)">
             <span class="icon">🔴</span>
-            <span>双色球</span>
+            <span>双色球复式</span>
         </div>
         <div class="nav-item" onclick="switchTab('view-3d-dan', this)">
             <span class="icon">🎲</span>
-            <span>3D包串</span>
+            <span>3D 包串</span>
         </div>
         <div class="nav-item" onclick="switchTab('view-3d-tuo', this)">
             <span class="icon">🎯</span>
-            <span>3D胆拖</span>
+            <span>3D 胆拖</span>
         </div>
     </nav>
 
@@ -315,62 +482,18 @@
             document.querySelectorAll('.page-view').forEach(view => {
                 view.classList.remove('active');
             });
-            // 移除所有 Tab 的高亮
+            // 移除所有 Tab 的高亮状态
             document.querySelectorAll('.nav-item').forEach(nav => {
                 nav.classList.remove('active');
             });
             
-            // 显示目标页面并高亮当前 Tab
+            // 显示目标页面并高亮当前点击的 Tab
             document.getElementById(viewId).classList.add('active');
             element.classList.add('active');
 
-            // 滚动到顶部
+            // 切换页面时自动回到顶部
             window.scrollTo(0, 0);
         }
-
-        // 开奖数据加载逻辑 (原代码保持不变)
-        const initSysDate = () => {
-            const now = new Date();
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            const dateStr = now.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '.');
-            document.getElementById('systemDate').innerText = `${dateStr} // ${days[now.getDay()]}`;
-        };
-
-        const fetchLotteryData = () => {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    resolve([
-                        { id: 'ssq', name: '双色球', issue: '2026038', drawDate: '2026.04.02', rules: '每周二、四、日', reds: ['03', '08', '11', '14', '18', '23'], blues: ['16'] },
-                        { id: '3d', name: '福彩 3D', issue: '2026085', drawDate: '2026.04.04', rules: '每日开奖', reds: ['08', '00', '05'], blues: [] },
-                        { id: 'qlc', name: '七乐彩', issue: '2026037', drawDate: '2026.04.03', rules: '每周一、三、五', reds: ['01', '05', '09', '15', '22', '26', '28'], blues: ['12'] },
-                        { id: 'kl8', name: '快乐 8', issue: '2026085', drawDate: '2026.04.04', rules: '每日开奖', reds: ['02', '05', '13', '18', '22', '29', '34', '35', '41', '44'], blues: [] }
-                    ]);
-                }, 600);
-            });
-        };
-
-        const createCard = (data, index) => {
-            const card = document.createElement('div');
-            card.className = 'glass-card';
-            setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, index * 150 + 50);
-            const redHtml = data.reds.map((n, i) => `<div class="ball red" style="z-index: ${20-i}">${n}</div>`).join('');
-            const blueHtml = data.blues.map((n, i) => `<div class="ball blue" style="z-index: ${10-i}">${n}</div>`).join('');
-            const todayStr = new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '.');
-            const isToday = data.drawDate === todayStr;
-            const dateHtml = isToday ? `<span class="highlight" style="color: var(--gold-accent); text-shadow: 0 0 8px var(--gold-glow);">Today</span>` : `<span class="highlight">${data.drawDate}</span>`;
-            card.innerHTML = `<div class="card-header"><div class="lottery-name">${data.name}</div><div class="issue-badge">NO. ${data.issue}</div></div><div class="meta-info"><div>DATE / ${dateHtml}</div><div>FREQ / <span class="highlight">${data.rules}</span></div></div><div class="balls-container">${redHtml}${blueHtml}</div>`;
-            return card;
-        };
-
-        const renderBoard = async () => {
-            initSysDate();
-            const board = document.getElementById('lotteryBoard');
-            const data = await fetchLotteryData();
-            board.innerHTML = '';
-            data.forEach((item, index) => { board.appendChild(createCard(item, index)); });
-        };
-
-        window.addEventListener('DOMContentLoaded', renderBoard);
     </script>
 </body>
 </html>
