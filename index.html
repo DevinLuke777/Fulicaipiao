@@ -2,13 +2,15 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>福彩开奖 | 极客与奢华重塑版</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>福彩综合站 | 极客与奢华重塑版</title>
     
     <link href="https://fonts.geekzu.org/css2?family=Outfit:wght@300;500;800;900&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
     
     <style>
+        /* ==================== 全局变量 ==================== */
         :root {
+            /* 玻璃拟态主题变量 */
             --bg-obsidian: #050507;
             --glass-bg: rgba(20, 20, 25, 0.4);
             --glass-border: rgba(255, 255, 255, 0.05);
@@ -20,285 +22,313 @@
             --blue-sphere: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
             --font-cn: 'ZCOOL XiaoWei', serif;
             --font-num: 'Outfit', sans-serif;
+
+            /* 海报主题变量 */
+            --lucky-red: #da251d;
+            --dark-red: #a11312;
+            --gold: #ffd700;
+            --pure-yellow: #FFFF00;
+            --light-gold: #fffde7;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             background-color: var(--bg-obsidian);
-            color: var(--text-primary);
             font-family: var(--font-num);
-            min-height: 100vh;
             overflow-x: hidden;
-            position: relative;
-            padding: 4rem 2rem;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 视图切换控制 */
+        .page-view { display: none; width: 100%; min-height: 100vh; padding-bottom: 80px; }
+        .page-view.active { display: flex; flex-direction: column; align-items: center; }
+
+        /* ==================== 底部导航栏 ==================== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            height: 70px;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .nav-item {
+            color: var(--text-muted);
+            font-family: var(--font-cn);
+            font-size: 0.9rem;
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 10px;
         }
 
-        /* 环境光效 (Ambient Glow) */
-        .ambient-light {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(120px);
-            z-index: -1;
-            opacity: 0.5;
+        .nav-item .icon { font-size: 1.4rem; filter: grayscale(100%) opacity(0.6); transition: all 0.3s; }
+        
+        .nav-item.active { color: var(--gold-accent); text-shadow: 0 0 10px var(--gold-glow); }
+        .nav-item.active .icon { filter: grayscale(0%) opacity(1); transform: translateY(-2px); }
+
+        /* ==================== 模块一：开奖公告 (原玻璃拟态风) ==================== */
+        #view-results { padding-top: 4rem; color: var(--text-primary); position: relative; }
+        
+        /* 环境光效仅在开奖页面生效 */
+        #view-results .ambient-light {
+            position: absolute; border-radius: 50%; filter: blur(120px); z-index: -1; opacity: 0.5;
             animation: breathe 8s infinite alternate ease-in-out;
         }
-        .light-1 {
-            top: -10vw; left: -10vw;
-            width: 50vw; height: 50vw;
-            background: rgba(255, 8, 68, 0.15);
-        }
-        .light-2 {
-            bottom: -10vw; right: -10vw;
-            width: 40vw; height: 40vw;
-            background: rgba(0, 198, 255, 0.15);
-            animation-delay: -4s;
-        }
-        .light-3 {
-            top: 40%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 30vw; height: 30vw;
-            background: rgba(212, 175, 55, 0.1);
-        }
+        .light-1 { top: -10vw; left: -10vw; width: 50vw; height: 50vw; background: rgba(255, 8, 68, 0.15); }
+        .light-2 { bottom: -10vw; right: -10vw; width: 40vw; height: 40vw; background: rgba(0, 198, 255, 0.15); animation-delay: -4s; }
+        .light-3 { top: 40%; left: 50%; transform: translate(-50%, -50%); width: 30vw; height: 30vw; background: rgba(212, 175, 55, 0.1); }
 
-        /* 背景噪点肌理 */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+        /* 噪点背景 */
+        .noise-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 0;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 5rem;
-            position: relative;
-            z-index: 2;
-            animation: fadeDown 1s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-
-        .main-title {
-            font-family: var(--font-cn);
-            font-size: 4rem;
-            font-weight: 400;
-            letter-spacing: 8px;
-            background: linear-gradient(to right, #fff, #a3a3b5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
-        }
-
-        .sys-date {
-            font-family: var(--font-cn);
-            font-size: 1.1rem;
-            color: var(--gold-accent);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-            padding-bottom: 0.5rem;
-            display: inline-block;
-        }
-
-        .board-grid {
-            width: 100%;
-            max-width: 1200px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-            gap: 2rem;
-            z-index: 2;
-        }
-
-        /* 玻璃拟态卡片 */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 2.5rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        }
-
-        .glass-card:hover {
-            transform: translateY(-10px);
-            background: rgba(30, 30, 38, 0.5);
-            border-color: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 40px var(--gold-glow);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding-bottom: 1.5rem;
-        }
-
-        .lottery-name {
-            font-family: var(--font-cn);
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #fff;
-            line-height: 1;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-        }
-
-        .issue-badge {
-            background: rgba(212, 175, 55, 0.15);
-            color: var(--gold-accent);
-            padding: 0.4rem 1rem;
-            border-radius: 100px;
-            font-size: 0.9rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-        }
-
-        .meta-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-            font-family: var(--font-cn);
-        }
-
-        .meta-info .highlight {
-            color: #fff;
-            font-family: var(--font-num);
-            font-weight: 300;
-        }
-
-        /* 悬浮微重叠球体组 */
-        .balls-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0; /* 初始无间隙，依靠 margin 负值产生重叠 */
-            transition: gap 0.4s ease;
-        }
-
-        .glass-card:hover .balls-container {
-            gap: 8px; /* Hover 时散开 */
-        }
-
-        .glass-card:hover .ball {
-            margin-left: 0 !important; /* 取消重叠 */
-        }
-
-        .ball {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: #fff;
-            position: relative;
-            margin-left: -12px; /* 默认重叠 */
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: -4px 0 10px rgba(0,0,0,0.4);
-            border: 2px solid rgba(255,255,255,0.1);
-        }
-
-        .ball:first-child { margin-left: 0; }
-
-        /* 摒弃老旧的高光，改用极简渐变与柔和发光 */
-        .ball.red {
-            background: var(--red-sphere);
-            box-shadow: -4px 0 10px rgba(0,0,0,0.4), inset 0 0 15px rgba(0,0,0,0.2);
-        }
+        #view-results header { text-align: center; margin-bottom: 3rem; z-index: 2; }
+        .main-title { font-family: var(--font-cn); font-size: 3rem; font-weight: 400; letter-spacing: 6px; background: linear-gradient(to right, #fff, #a3a3b5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+        .sys-date { font-family: var(--font-cn); font-size: 1rem; color: var(--gold-accent); letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid rgba(212, 175, 55, 0.3); padding-bottom: 0.5rem; display: inline-block; }
         
-        .ball.blue {
-            background: var(--blue-sphere);
-            box-shadow: -4px 0 10px rgba(0,0,0,0.4), inset 0 0 15px rgba(0,0,0,0.2);
-        }
+        .board-grid { width: 100%; max-width: 1200px; padding: 0 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; z-index: 2; }
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 2rem; position: relative; overflow: hidden; opacity: 0; transform: translateY(30px); transition: all 0.5s; }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem; }
+        .lottery-name { font-family: var(--font-cn); font-size: 2rem; font-weight: bold; line-height: 1; }
+        .issue-badge { background: rgba(212, 175, 55, 0.15); color: var(--gold-accent); padding: 0.3rem 0.8rem; border-radius: 100px; font-size: 0.8rem; font-weight: 800; border: 1px solid rgba(212, 175, 55, 0.3); }
+        .meta-info { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem; font-family: var(--font-cn); }
+        .meta-info .highlight { color: #fff; font-family: var(--font-num); font-weight: 300; }
+        
+        .balls-container { display: flex; flex-wrap: wrap; gap: 0; transition: gap 0.4s ease; }
+        .glass-card:hover .balls-container { gap: 6px; }
+        .glass-card:hover .ball { margin-left: 0 !important; }
+        .ball { width: 44px; height: 44px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; font-weight: 900; color: #fff; position: relative; margin-left: -10px; transition: all 0.4s; box-shadow: -4px 0 10px rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.1); }
+        .ball:first-child { margin-left: 0; }
+        .ball.red { background: var(--red-sphere); box-shadow: -4px 0 10px rgba(0,0,0,0.4), inset 0 0 15px rgba(0,0,0,0.2); }
+        .ball.blue { background: var(--blue-sphere); box-shadow: -4px 0 10px rgba(0,0,0,0.4), inset 0 0 15px rgba(0,0,0,0.2); }
+        .ball.blue:first-of-type { margin-left: 12px; }
 
-        .ball.blue:first-of-type {
-            margin-left: 15px; /* 蓝球和红球稍微隔开 */
-        }
-        .glass-card:hover .ball.blue:first-of-type {
-            margin-left: 20px !important;
-        }
+        @keyframes breathe { from { transform: scale(1); opacity: 0.4; } to { transform: scale(1.1); opacity: 0.6; } }
 
-        /* 骨架屏设计 */
-        .skeleton .lottery-name { width: 120px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 8px; }
-        .skeleton .issue-badge { width: 80px; height: 28px; background: rgba(255,255,255,0.1); }
-        .skeleton .ball { background: rgba(255,255,255,0.05); border-color: transparent; box-shadow: none; }
-        .skeleton { animation: pulse 1.5s infinite alternate; }
+        /* ==================== 模块二：海报视图通用样式 (作用于原3个页面) ==================== */
+        .poster-theme { background: #111; color: #333; font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; padding-top: 10px; }
+        .poster-container { background: linear-gradient(135deg, var(--lucky-red) 0%, #c62828 100%); width: 95%; max-width: 420px; border: 2px double var(--gold); border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.8); position: relative; overflow: hidden; margin-bottom: 20px; }
+        .poster-container::before { content: "💰"; position: absolute; font-size: 15rem; color: rgba(255, 215, 0, 0.04); top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); pointer-events: none; z-index: 0; }
+        .poster-container > * { position: relative; z-index: 1; }
+        .poster-header-title { text-align: center; margin-bottom: 15px; margin-top: 15px;}
+        .poster-header-title h1 { font-size: 1.6rem; font-weight: 900; color: var(--gold); letter-spacing: 2px; margin: 0; text-shadow: 0 2px 0 #b71c1c; }
+        
+        .section-card { background: #fff; border: 2px solid var(--gold); border-radius: 6px; margin: 0 4px 16px 4px; padding: 18px 2px 2px 2px; position: relative; }
+        .section-header { background: linear-gradient(to right, #d32f2f, #f44336, #d32f2f); color: var(--gold); padding: 2px 15px; border-radius: 4px 4px 0 0; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); font-size: 1rem; font-weight: 900; letter-spacing: 2px; border: 1px solid var(--gold); box-shadow: 0 1px 3px rgba(0,0,0,0.3); white-space: nowrap; }
+        
+        .rule-container { text-align: center; margin-top: 2px; margin-bottom: 6px; }
+        .rule-explanation { display: inline-block; background: var(--pure-yellow); color: var(--lucky-red); font-size: 0.8rem; font-weight: 900; padding: 2px 8px; border-radius: 4px; border: 2px solid #000; letter-spacing: 0.5px; white-space: nowrap; animation: pulse-glow 1.5s infinite ease-in-out;}
+        @keyframes pulse-glow { 0% { box-shadow: 0 0 2px var(--pure-yellow); } 50% { box-shadow: 0 0 8px var(--pure-yellow); } 100% { box-shadow: 0 0 2px var(--pure-yellow); } }
 
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            100% { opacity: 1; }
-        }
+        .poster-theme table { width: 100%; border-collapse: collapse; background: var(--light-gold); border: 1px solid #ffca28; table-layout: fixed; }
+        .poster-theme th { background: var(--gold); color: var(--dark-red); font-weight: 900; font-size: 0.8rem; padding: 4px 1px; border-bottom: 1px solid #f57c00; border-right: 1px solid #f57c00; }
+        .poster-theme td { padding: 3px 1px; text-align: center; border-bottom: 1px solid #f57c00; border-right: 1px solid #f57c00; font-weight: 800; background-color: #fffde7; font-size: 0.9rem;}
+        .poster-theme tr:nth-child(even) td { background-color: #fff9c4; }
+        .poster-theme th:last-child, .poster-theme td:last-child { border-right: none; }
+        
+        .price-col { color: #1b5e20; }
+        .reward-col { color: var(--lucky-red); font-size: 1.05rem; font-weight: 900; }
 
-        @keyframes fadeDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* 双色球特有样式 */
+        .type-col { font-family: 'Arial Black', sans-serif;}
+        .detail-col { text-align: left !important; font-size: 0.68rem !important; line-height: 1.2; padding: 3px 4px !important; }
+        .prize-item { display: inline-block; white-space: nowrap; margin-right: 4px; margin-bottom: 1px; }
+        .detail-col .r-val { color: var(--lucky-red); font-size: 0.72rem; font-weight: 900; margin: 0 1px; }
 
-        @keyframes breathe {
-            from { transform: scale(1); opacity: 0.4; }
-            to { transform: scale(1.1); opacity: 0.6; }
-        }
-
-        @media (max-width: 768px) {
-            .main-title { font-size: 2.8rem; letter-spacing: 4px; }
-            .board-grid { grid-template-columns: 1fr; }
-            .glass-card { padding: 2rem; }
-            .ball { width: 44px; height: 44px; font-size: 1.2rem; margin-left: -8px; }
-        }
     </style>
 </head>
 <body>
 
-    <div class="ambient-light light-1"></div>
-    <div class="ambient-light light-2"></div>
-    <div class="ambient-light light-3"></div>
+    <div id="view-results" class="page-view active">
+        <div class="noise-bg"></div>
+        <div class="ambient-light light-1"></div>
+        <div class="ambient-light light-2"></div>
+        <div class="ambient-light light-3"></div>
 
-    <header>
-        <h1 class="main-title">福利彩票公告</h1>
-        <div class="sys-date" id="systemDate">CALCULATING ALIGNMENT...</div>
-    </header>
+        <header>
+            <h1 class="main-title">福利彩票公告</h1>
+            <div class="sys-date" id="systemDate">CALCULATING ALIGNMENT...</div>
+        </header>
+        <main class="board-grid" id="lotteryBoard"></main>
+    </div>
 
-    <main class="board-grid" id="lotteryBoard">
-        <div class="glass-card skeleton" style="opacity: 1; transform: translateY(0);">
-            <div class="card-header">
-                <div class="lottery-name"></div>
-                <div class="issue-badge"></div>
-            </div>
-            <div class="meta-info">
-                <span>Loading Data...</span>
-            </div>
-            <div class="balls-container">
-                <div class="ball"></div><div class="ball"></div><div class="ball"></div><div class="ball"></div>
+    <div id="view-ssq" class="page-view poster-theme">
+        <div class="poster-container">
+            <div class="poster-header-title"><h1>双色球复式明细</h1></div>
+            <div class="section-card">
+                <div class="section-header">双色球复式奖金对照</div>
+                <table>
+                    <thead><tr><th width="12%">投注</th><th width="15%">投入</th><th width="73%">中奖详情</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td class="type-col">7+1</td><td class="price-col">14元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中蓝球<span class="r-val">35元</span></span> <span class="prize-item">中3+1<span class="r-val">55元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">640元</span></span> <span class="prize-item">中5+1<span class="r-val">7000元</span></span>
+                                <span class="prize-item">中6+1 1个一等奖<span class="r-val">+18000元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">8+1</td><td class="price-col">56元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中蓝球<span class="r-val">140元</span></span> <span class="prize-item">中3+1<span class="r-val">190元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">1390元</span></span> <span class="prize-item">中5+1<span class="r-val">12100元</span></span>
+                                <span class="prize-item">中6+1 1个一等奖<span class="r-val">+39000元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">9+1</td><td class="price-col">168元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中蓝球<span class="r-val">420元</span></span> <span class="prize-item">中3+1<span class="r-val">520元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">2570元</span></span> <span class="prize-item">中5+1<span class="r-val">18450元</span></span>
+                                <span class="prize-item">中6+1 1个一等奖<span class="r-val">+63200元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">10+1</td><td class="price-col">420元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中蓝球<span class="r-val">1050元</span></span> <span class="prize-item">中3+1<span class="r-val">1225元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">4375元</span></span> <span class="prize-item">中5+1<span class="r-val">26275元</span></span>
+                                <span class="prize-item">中6+1 1个一等奖<span class="r-val">+90875元</span></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-    </main>
+    </div>
+
+    <div id="view-3d-dan" class="page-view poster-theme">
+        <div class="poster-container" style="padding-top:20px;">
+            <div class="poster-header-title"><h1>福彩3D 包串明细</h1></div>
+            
+            <div class="section-card">
+                <div class="section-header">单选玩法</div>
+                <div class="rule-container"><div class="rule-explanation">【 包串投注 即3个不同的号 】</div></div>
+                <table>
+                    <thead><tr><th width="33%">单选包串</th><th width="33%">投入(元)</th><th width="34%">单选奖金</th></tr></thead>
+                    <tbody>
+                        <tr><td>3码复式</td><td class="price-col">12</td><td class="reward-col">1040</td></tr>
+                        <tr><td>4码复式</td><td class="price-col">48</td><td class="reward-col">1040</td></tr>
+                        <tr><td>5码复式</td><td class="price-col">120</td><td class="reward-col">1040</td></tr>
+                        <tr><td>6码复式</td><td class="price-col">240</td><td class="reward-col">1040</td></tr>
+                        <tr><td>7码复式</td><td class="price-col">420</td><td class="reward-col">1040</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">组选六 / 组选三</div>
+                <div class="rule-container"><div class="rule-explanation">【 组三即对子 / 组六即三不同 】</div></div>
+                <table>
+                    <thead><tr><th width="33%">复式包串</th><th width="33%">组六投入</th><th width="34%">组三投入</th></tr></thead>
+                    <tbody>
+                        <tr><td>4码复式</td><td class="price-col">8元</td><td class="price-col">24元</td></tr>
+                        <tr><td>5码复式</td><td class="price-col">20元</td><td class="price-col">40元</td></tr>
+                        <tr><td>6码复式</td><td class="price-col">40元</td><td class="price-col">60元</td></tr>
+                        <tr><td>7码复式</td><td class="price-col">70元</td><td class="price-col">84元</td></tr>
+                        <tr><td>8码复式</td><td class="price-col">112元</td><td class="price-col">112元</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-3d-tuo" class="page-view poster-theme">
+        <div class="poster-container" style="padding-top:20px;">
+            <div class="poster-header-title"><h1>3D 胆拖明细</h1></div>
+            
+            <div class="section-card">
+                <div class="section-header">单选单胆拖</div>
+                <div class="rule-container"><div class="rule-explanation">【 含对子 】</div></div>
+                <table>
+                    <thead><tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">单选奖金</th></tr></thead>
+                    <tbody>
+                        <tr><td>1胆全拖</td><td class="price-col">542</td><td class="reward-col">1040</td></tr>
+                        <tr><td>2胆全拖</td><td class="price-col">108</td><td class="reward-col">1040</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">单选双胆拖</div>
+                <div class="rule-container"><div class="rule-explanation">【 即是对子 不含3个号不同 】</div></div>
+                <table>
+                    <thead><tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">单选奖金</th></tr></thead>
+                    <tbody>
+                        <tr><td>1胆全拖</td><td class="price-col">108</td><td class="reward-col">1040</td></tr>
+                        <tr><td>2胆全拖</td><td class="price-col">48</td><td class="reward-col">1040</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+             <div class="section-card">
+                <div class="section-header">组选六 / 组选三</div>
+                <table>
+                    <thead><tr><th width="34%">全拖玩法</th><th width="33%">组六投入</th><th width="33%">组三投入</th></tr></thead>
+                    <tbody>
+                        <tr><td>1胆全拖</td><td class="price-col">72</td><td class="price-col">36</td></tr>
+                        <tr><td>2胆全拖</td><td class="price-col">16</td><td class="price-col">18</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('view-results', this)">
+            <span class="icon">🔮</span>
+            <span>开奖结果</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('view-ssq', this)">
+            <span class="icon">🔴</span>
+            <span>双色球</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('view-3d-dan', this)">
+            <span class="icon">🎲</span>
+            <span>3D包串</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('view-3d-tuo', this)">
+            <span class="icon">🎯</span>
+            <span>3D胆拖</span>
+        </div>
+    </nav>
 
     <script>
+        // Tab 切换逻辑
+        function switchTab(viewId, element) {
+            // 隐藏所有页面
+            document.querySelectorAll('.page-view').forEach(view => {
+                view.classList.remove('active');
+            });
+            // 移除所有 Tab 的高亮
+            document.querySelectorAll('.nav-item').forEach(nav => {
+                nav.classList.remove('active');
+            });
+            
+            // 显示目标页面并高亮当前 Tab
+            document.getElementById(viewId).classList.add('active');
+            element.classList.add('active');
+
+            // 滚动到顶部
+            window.scrollTo(0, 0);
+        }
+
+        // 开奖数据加载逻辑 (原代码保持不变)
         const initSysDate = () => {
             const now = new Date();
             const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -310,26 +340,10 @@
             return new Promise(resolve => {
                 setTimeout(() => {
                     resolve([
-                        {
-                            id: 'ssq', name: '双色球', issue: '2026038',
-                            drawDate: '2026.04.02', rules: '每周二、四、日',
-                            reds: ['03', '08', '11', '14', '18', '23'], blues: ['16']
-                        },
-                        {
-                            id: '3d', name: '福彩 3D', issue: '2026085',
-                            drawDate: '2026.04.04', rules: '每日开奖',
-                            reds: ['08', '00', '05'], blues: []
-                        },
-                        {
-                            id: 'qlc', name: '七乐彩', issue: '2026037',
-                            drawDate: '2026.04.03', rules: '每周一、三、五',
-                            reds: ['01', '05', '09', '15', '22', '26', '28'], blues: ['12']
-                        },
-                        {
-                            id: 'kl8', name: '快乐 8', issue: '2026085',
-                            drawDate: '2026.04.04', rules: '每日开奖',
-                            reds: ['02', '05', '13', '18', '22', '29', '34', '35', '41', '44'], blues: []
-                        }
+                        { id: 'ssq', name: '双色球', issue: '2026038', drawDate: '2026.04.02', rules: '每周二、四、日', reds: ['03', '08', '11', '14', '18', '23'], blues: ['16'] },
+                        { id: '3d', name: '福彩 3D', issue: '2026085', drawDate: '2026.04.04', rules: '每日开奖', reds: ['08', '00', '05'], blues: [] },
+                        { id: 'qlc', name: '七乐彩', issue: '2026037', drawDate: '2026.04.03', rules: '每周一、三、五', reds: ['01', '05', '09', '15', '22', '26', '28'], blues: ['12'] },
+                        { id: 'kl8', name: '快乐 8', issue: '2026085', drawDate: '2026.04.04', rules: '每日开奖', reds: ['02', '05', '13', '18', '22', '29', '34', '35', '41', '44'], blues: [] }
                     ]);
                 }, 600);
             });
@@ -338,34 +352,13 @@
         const createCard = (data, index) => {
             const card = document.createElement('div');
             card.className = 'glass-card';
-            
-            // 错落进场动画
-            setTimeout(() => {
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, index * 150 + 50);
-
+            setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, index * 150 + 50);
             const redHtml = data.reds.map((n, i) => `<div class="ball red" style="z-index: ${20-i}">${n}</div>`).join('');
             const blueHtml = data.blues.map((n, i) => `<div class="ball blue" style="z-index: ${10-i}">${n}</div>`).join('');
-
             const todayStr = new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '.');
             const isToday = data.drawDate === todayStr;
             const dateHtml = isToday ? `<span class="highlight" style="color: var(--gold-accent); text-shadow: 0 0 8px var(--gold-glow);">Today</span>` : `<span class="highlight">${data.drawDate}</span>`;
-
-            card.innerHTML = `
-                <div class="card-header">
-                    <div class="lottery-name">${data.name}</div>
-                    <div class="issue-badge">NO. ${data.issue}</div>
-                </div>
-                <div class="meta-info">
-                    <div>DATE / ${dateHtml}</div>
-                    <div>FREQ / <span class="highlight">${data.rules}</span></div>
-                </div>
-                <div class="balls-container">
-                    ${redHtml}
-                    ${blueHtml}
-                </div>
-            `;
+            card.innerHTML = `<div class="card-header"><div class="lottery-name">${data.name}</div><div class="issue-badge">NO. ${data.issue}</div></div><div class="meta-info"><div>DATE / ${dateHtml}</div><div>FREQ / <span class="highlight">${data.rules}</span></div></div><div class="balls-container">${redHtml}${blueHtml}</div>`;
             return card;
         };
 
@@ -373,11 +366,8 @@
             initSysDate();
             const board = document.getElementById('lotteryBoard');
             const data = await fetchLotteryData();
-            
             board.innerHTML = '';
-            data.forEach((item, index) => {
-                board.appendChild(createCard(item, index));
-            });
+            data.forEach((item, index) => { board.appendChild(createCard(item, index)); });
         };
 
         window.addEventListener('DOMContentLoaded', renderBoard);
