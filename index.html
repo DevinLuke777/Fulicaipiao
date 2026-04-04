@@ -31,6 +31,16 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* ==================== 全局防盗水印 ==================== */
+        .watermark-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* 关键点：穿透点击，完全不影响用户操作 */
+            z-index: 9999; /* 确保始终浮在页面的最顶层 */
+            /* 使用转码后的 SVG 生成高性能的斜向重复水印图案 */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='200'%3E%3Ctext x='50%25' y='50%25' transform='rotate(-30 125 100)' fill='rgba(150,150,150,0.25)' font-family='Arial, sans-serif' font-size='22' font-weight='bold' letter-spacing='2' text-anchor='middle' dominant-baseline='middle'%3EDevinLuke%3C/text%3E%3C/svg%3E");
+        }
+
         /* 视图切换控制 */
         .page-view { 
             display: none; 
@@ -161,6 +171,8 @@
     </style>
 </head>
 <body>
+
+    <div class="watermark-overlay"></div>
 
     <div id="view-ssq" class="page-view active">
         <div class="poster-container">
