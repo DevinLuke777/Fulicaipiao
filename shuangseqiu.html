@@ -159,6 +159,20 @@
             font-weight: 900;
             margin: 0 1px;
         }
+
+        /* ==================== 打印/导出PDF 专属优化 ==================== */
+        @media print {
+            body {
+                background: #ffffff !important; /* 强制外围背景变白，消除黑边 */
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .poster-container {
+                box-shadow: none !important; /* 去除阴影，让边缘更干净 */
+                margin: 0 auto !important;
+                page-break-inside: avoid; /* 尽量防止被从中间切断 */
+            }
+        }
     </style>
 </head>
 <body>
