@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>快乐8复式 - 黄金比例压缩版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --lucky-red: #da251d;
+            --dark-red: #a11312;
+            --gold: #ffd700;
+            --text-dark: #111111;
+            --bg-light: #fffde7;
+            --bg-alt: #fff9c4;
+        }
+
+        html {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            background: #111; 
+            color: var(--text-dark);
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            padding: 6px 4px; 
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* 宽屏容器，微调内边距 */
+        .poster-container {
+            background: linear-gradient(135deg, var(--lucky-red) 0%, #c62828 100%);
+            width: 100%;
+            max-width: 880px; 
+            /* 顶部留出 40px 防刘海，底部适度压缩 */
+            padding: 40px 8px 10px 8px; 
+            border: 3px double var(--gold);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .poster-container::before {
+            content: "💰";
+            position: absolute;
+            font-size: 25rem;
+            color: rgba(255, 215, 0, 0.03);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* 主标题排版 */
+        .header-title {
+            text-align: center;
+            margin-bottom: 10px; /* 压缩标题下部空间 */
+            position: relative;
+            z-index: 1;
+        }
+        .header-title h1 {
+            font-size: 1.7rem;
+            font-weight: 900;
+            color: var(--gold);
+            letter-spacing: 2px;
+            margin: 0;
+            text-shadow: 0 2px 0 #b71c1c, 0 3px 5px rgba(0,0,0,0.5);
+        }
+
+        /* 网格布局：强制左右两列等高 */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px; /* 减小左右列的间隙 */
+            align-items: stretch; 
+            position: relative;
+            z-index: 1;
+        }
+
+        .left-col, .right-col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 表格基础样式 */
+        table {
+            width: 100%;
+            height: 100%; 
+            border-collapse: collapse;
+            background: var(--bg-light);
+            border: 2px solid var(--gold);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            table-layout: fixed;
+        }
+
+        th {
+            background: linear-gradient(to bottom, #ffe066, #ffca28) !important;
+            color: var(--dark-red);
+            font-weight: 900;
+            font-size: 0.9rem; 
+            padding: 4px 1px; /* 表头高度压缩 */
+            border-bottom: 2px solid #f57c00;
+            border-right: 1px solid #f57c00;
+            line-height: 1.1;
+        }
+        th:last-child { border-right: none; }
+        
+        td {
+            padding: 3px 1px; /* 数据行高度压缩 */
+            text-align: center;
+            border-bottom: 1px solid #f57c00;
+            border-right: 1px solid #f57c00;
+            vertical-align: middle;
+            background-color: var(--bg-light) !important;
+        }
+        td:last-child { border-right: none; }
+        
+        tr:nth-child(even) td { background-color: var(--bg-alt) !important; }
+
+        /* 统一列宽比例 */
+        .w-play { width: 9%; }
+        .w-type { width: 14%; }
+        .w-price { width: 14%; }
+        .w-detail { width: 63%; }
+
+        /* 左侧列特写（玩法） */
+        .play-col {
+            background-color: #fff59d !important;
+            color: #d32f2f;
+            font-size: 0.9rem;
+            font-weight: 900;
+            line-height: 1.2;
+        }
+        
+        .type-col { color: #000; font-family: 'Arial Black', sans-serif; font-size: 0.85rem; font-weight: 800;}
+        .price-col { color: #1b5e20; font-size: 0.95rem; font-weight: 900;}
+        
+        /* 详情列：压紧行高 */
+        .detail-col {
+            text-align: left !important;
+            line-height: 1.35; 
+            padding: 3px 4px !important;
+        }
+        
+        /* 标签流式排版：极致优化间距，完整保留文字 */
+        .prize-item {
+            display: inline-block;
+            white-space: nowrap; 
+            margin-right: 2px; /* 间距压榨 */
+            margin-bottom: 2px; /* 间距压榨 */
+            background: rgba(218, 37, 29, 0.07); 
+            padding: 1px 4px; /* 内边距压榨 */
+            border-radius: 3px;
+            border: 1px solid rgba(218, 37, 29, 0.15);
+            font-size: 0.78rem; /* 字号微调 */
+            color: var(--text-dark);
+            font-weight: 700;
+            letter-spacing: -0.2px; 
+        }
+        
+        .detail-col .r-val {
+            color: var(--lucky-red);
+            font-size: 0.85rem;
+            font-weight: 900;
+            margin-left: 2px;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: var(--gold);
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-top: 8px;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+        }
+
+        @media (max-width: 768px) {
+            .grid-layout { grid-template-columns: 1fr; gap: 8px; }
+            .poster-container { max-width: 480px; padding-top: 35px; }
+            table { height: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="poster-container">
+        
+        <div class="header-title">
+            <h1>快乐 8 玩法复式投注参考</h1>
+        </div>
+
+        <div class="grid-layout">
+            
+            <div class="left-col">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="w-play">玩法</th>
+                            <th class="w-type">投注方式</th>
+                            <th class="w-price">投注金额</th>
+                            <th class="w-detail">中奖金额</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="2" class="play-col">选四</td>
+                            <td class="type-col">5选4</td>
+                            <td class="price-col">10元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中2个奖<span class="r-val">9元</span></span>
+                                <span class="prize-item">中3个奖<span class="r-val">19元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">113元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">465元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">6选4</td>
+                            <td class="price-col">30元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中2个奖<span class="r-val">18元</span></span>
+                                <span class="prize-item">中3个奖<span class="r-val">42元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">151元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">515元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">1395元</span></span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td rowspan="4" class="play-col" style="border-top:2px solid #f57c00;">选五</td>
+                            <td class="type-col" style="border-top:2px solid #f57c00;">6选5</td>
+                            <td class="price-col" style="border-top:2px solid #f57c00;">12元</td>
+                            <td class="detail-col" style="border-top:2px solid #f57c00;">
+                                <span class="prize-item">中3个奖<span class="r-val">9元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">52元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">1100元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">6000元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">7选5</td>
+                            <td class="price-col">42元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中3个奖<span class="r-val">18元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">96元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">1230元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">6300元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">21000元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">8选5</td>
+                            <td class="price-col">112元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中3个奖<span class="r-val">30元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">152元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">1390元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">6660元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">21700元</span></span>
+                                <span class="prize-item">中8个奖<span class="r-val">56000元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">9选5</td>
+                            <td class="price-col">252元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中3个奖<span class="r-val">45元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">220元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">1580元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">7080元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">22505元</span></span>
+                                <span class="prize-item">中8个奖<span class="r-val">57400元</span></span>
+                                <span class="prize-item">中9个奖<span class="r-val">126000元</span></span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td rowspan="4" class="play-col" style="border-top:2px solid #f57c00;">选六</td>
+                            <td class="type-col" style="border-top:2px solid #f57c00;">7选6</td>
+                            <td class="price-col" style="border-top:2px solid #f57c00;">14元</td>
+                            <td class="detail-col" style="border-top:2px solid #f57c00;">
+                                <span class="prize-item">中3个奖<span class="r-val">12元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">42元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">110元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">3060元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">20160元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">8选6</td>
+                            <td class="price-col">56元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中3个奖<span class="r-val">30元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">108元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">270元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">3390元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">20790元</span></span>
+                                <span class="prize-item">中8个奖<span class="r-val">80640元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">9选6</td>
+                            <td class="price-col">168元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中3个奖<span class="r-val">60元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">220元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">540元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">3930元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">21770元</span></span>
+                                <span class="prize-item">中8个奖<span class="r-val">82320元</span></span>
+                                <span class="prize-item">中9个奖<span class="r-val">241920元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">10选6</td>
+                            <td class="price-col">420元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中3个奖<span class="r-val">105元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">390元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">950元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">4740元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">23205元</span></span>
+                                <span class="prize-item">中8个奖<span class="r-val">84700元</span></span>
+                                <span class="prize-item">中9个奖<span class="r-val">245700元</span></span>
+                                <span class="prize-item">中10个奖<span class="r-val">604800元</span></span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td rowspan="3" class="play-col" style="border-top:2px solid #f57c00;">选七</td>
+                            <td class="type-col" style="border-top:2px solid #f57c00;">8选7</td>
+                            <td class="price-col" style="border-top:2px solid #f57c00;">16元</td>
+                            <td class="detail-col" style="border-top:2px solid #f57c00;">
+                                <span class="prize-item">中0个奖<span class="r-val">16元</span></span>
+                                <span class="prize-item">中1个奖<span class="r-val">2元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">16元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">110元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">780元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">10600元</span></span>
+                                <span class="prize-item">中8个奖<span class="r-val">68000元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">9选7</td>
+                            <td class="price-col">72元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中0个奖<span class="r-val">72元</span></span>
+                                <span class="prize-item">中1个奖<span class="r-val">16元</span></span>
+                                <span class="prize-item">中2个奖<span class="r-val">2元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">40元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">260元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">1500元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">13330元</span></span>
+                                <span class="prize-item">中8个奖<span class="r-val">76400元</span></span>
+                                <span class="prize-item">中9个奖<span class="r-val">306000元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">10选7</td>
+                            <td class="price-col">240元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中0个奖<span class="r-val">240元</span></span>
+                                <span class="prize-item">中1个奖<span class="r-val">72元</span></span>
+                                <span class="prize-item">中2个奖<span class="r-val">16元</span></span>
+                                <span class="prize-item">中3个奖<span class="r-val">2元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">80元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">500元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">2520元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">16830元</span></span>
+                                <span class="prize-item">中8个奖<span class="r-val">86480元</span></span>
+                                <span class="prize-item">中9个奖<span class="r-val">331200元</span></span>
+                                <span class="prize-item">中10个奖<span class="r-val">1020000元</span></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="right-col">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="w-play">玩法</th>
+                            <th class="w-type">投注方式</th>
+                            <th class="w-price">投注金额</th>
+                            <th class="w-detail">中奖金额</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="3" class="play-col">选八</td>
+                            <td class="type-col">9选8</td>
+                            <td class="price-col">18元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中0个奖<span class="r-val">18元</span></span>
+                                <span class="prize-item">中1个奖<span class="r-val">2元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">15元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">55元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">300元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">2160元</span></span>
+                                <span class="prize-item">中8个奖<span class="r-val">56400元</span></span>
+                                <span class="prize-item">中9个奖<span class="r-val">450000元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">10选8</td>
+                            <td class="price-col">90元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中0个奖<span class="r-val">90元</span></span>
+                                <span class="prize-item">中1个奖<span class="r-val">18元</span></span>
+                                <span class="prize-item">中2个奖<span class="r-val">2元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">45元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">175元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">765元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">4290元</span></span>
+                                <span class="prize-item">中8个奖<span class="r-val">65040元</span></span>
+                                <span class="prize-item">中9个奖<span class="r-val">478800元</span></span>
+                                <span class="prize-item">中10个奖<span class="r-val">2250000元</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">11选8</td>
+                            <td class="price-col">330元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中0个奖<span class="r-val">330元</span></span>
+                                <span class="prize-item">中1个奖<span class="r-val">90元</span></span>
+                                <span class="prize-item">中2个奖<span class="r-val">18元</span></span>
+                                <span class="prize-item">中3个奖<span class="r-val">2元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">105元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">425元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">1625元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">7505元</span></span>
+                                <span class="prize-item">中8个奖<span class="r-val">76480元</span></span>
+                                <span class="prize-item">中9个奖<span class="r-val">514320元</span></span>
+                                <span class="prize-item">中10个奖<span class="r-val">2346000元</span></span>
+                                <span class="prize-item">中11个奖<span class="r-val">8250000元</span></span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td rowspan="3" class="play-col" style="border-top:2px solid #f57c00;">选九</td>
+                            <td class="type-col" style="border-top:2px solid #f57c00;">10选9</td>
+                            <td class="price-col" style="border-top:2px solid #f57c00;">20元</td>
+                            <td class="detail-col" style="border-top:2px solid #f57c00;">
+                                <span class="prize-item">中0个奖<span class="r-val">20元</span></span>
+                                <span class="prize-item">中1个奖<span class="r-val">2元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">18元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">40元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">118元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">829元</span></span>
+                                <span class="prize-item">中8个奖<span class="r-val">5800元</span></span>
+                                <span class="prize-item">中9个奖<span class="r-val">1A+18000</span></span>
+                                <span class="prize-item">中10个奖<span class="r-val">10A</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">11选9</td>
+                            <td class="price-col">110元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中0个奖<span class="r-val">110元</span></span>
+                                <span class="prize-item">中1个奖<span class="r-val">20元</span></span>
+                                <span class="prize-item">中2个奖<span class="r-val">2元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">63元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">165元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">415元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">2071元</span></span>
+                                <span class="prize-item">中8个奖<span class="r-val">12016元</span></span>
+                                <span class="prize-item">中9个奖<span class="r-val">1A+44100</span></span>
+                                <span class="prize-item">中10个奖<span class="r-val">10A+90000</span></span>
+                                <span class="prize-item">中11个奖<span class="r-val">55A</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">12选9</td>
+                            <td class="price-col">440元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中0个奖<span class="r-val">440元</span></span>
+                                <span class="prize-item">中1个奖<span class="r-val">110元</span></span>
+                                <span class="prize-item">中2个奖<span class="r-val">20元</span></span>
+                                <span class="prize-item">中3个奖<span class="r-val">2元</span></span>
+                                <span class="prize-item">中4个奖<span class="r-val">168元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">490元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">1160元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">4420元</span></span>
+                                <span class="prize-item">中8个奖<span class="r-val">21544元</span></span>
+                                <span class="prize-item">中9个奖<span class="r-val">1A+80148</span></span>
+                                <span class="prize-item">中10个奖<span class="r-val">10A+207000</span></span>
+                                <span class="prize-item">中11个奖<span class="r-val">55A+330000</span></span>
+                                <span class="prize-item">中12个奖<span class="r-val">220A</span></span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td rowspan="3" class="play-col" style="border-top:2px solid #f57c00;">选十</td>
+                            <td class="type-col" style="border-top:2px solid #f57c00;">11选10</td>
+                            <td class="price-col" style="border-top:2px solid #f57c00;">22元</td>
+                            <td class="detail-col" style="border-top:2px solid #f57c00;">
+                                <span class="prize-item">中0个奖<span class="r-val">22元</span></span>
+                                <span class="prize-item">中1个奖<span class="r-val">2元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">18元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">43元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">355元</span></span>
+                                <span class="prize-item">中8个奖<span class="r-val">2800元</span></span>
+                                <span class="prize-item">中9个奖<span class="r-val">22480元</span></span>
+                                <span class="prize-item">中10个奖<span class="r-val">1A+80000</span></span>
+                                <span class="prize-item">中11个奖<span class="r-val">11A</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">12选10</td>
+                            <td class="price-col">132元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中0个奖<span class="r-val">132元</span></span>
+                                <span class="prize-item">中1个奖<span class="r-val">22元</span></span>
+                                <span class="prize-item">中2个奖<span class="r-val">2元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">63元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">183元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">1038元</span></span>
+                                <span class="prize-item">中8个奖<span class="r-val">7020元</span></span>
+                                <span class="prize-item">中9个奖<span class="r-val">46320元</span></span>
+                                <span class="prize-item">中10个奖<span class="r-val">1A+192400</span></span>
+                                <span class="prize-item">中11个奖<span class="r-val">11A+440000</span></span>
+                                <span class="prize-item">中12个奖<span class="r-val">66A</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="type-col">13选10</td>
+                            <td class="price-col">572元</td>
+                            <td class="detail-col">
+                                <span class="prize-item">中0个奖<span class="r-val">572元</span></span>
+                                <span class="prize-item">中1个奖<span class="r-val">132元</span></span>
+                                <span class="prize-item">中2个奖<span class="r-val">22元</span></span>
+                                <span class="prize-item">中3个奖<span class="r-val">2元</span></span>
+                                <span class="prize-item">中5个奖<span class="r-val">168元</span></span>
+                                <span class="prize-item">中6个奖<span class="r-val">553元</span></span>
+                                <span class="prize-item">中7个奖<span class="r-val">2503元</span></span>
+                                <span class="prize-item">中8个奖<span class="r-val">14468元</span></span>
+                                <span class="prize-item">中9个奖<span class="r-val">82820元</span></span>
+                                <span class="prize-item">中10个奖<span class="r-val">1A+346800</span></span>
+                                <span class="prize-item">中11个奖<span class="r-val">11A+998800</span></span>
+                                <span class="prize-item">中12个奖<span class="r-val">66A+1760000</span></span>
+                                <span class="prize-item">中13个奖<span class="r-val">286A</span></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="footer-note">※ 注：表中 "A" 代表当期浮动奖金</div>
+
+    </div>
+
+</body>
+</html>
