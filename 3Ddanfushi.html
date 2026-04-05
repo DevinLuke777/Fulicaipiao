@@ -155,6 +155,22 @@
         .price-col { color: #1b5e20; }
         .reward-col { color: var(--lucky-red); font-size: 1.05rem; font-weight: 900; }
 
+        /* ==================== 打印/导出PDF 专属优化 ==================== */
+        @media print {
+            body {
+                background: #ffffff !important; /* 强制外围背景变白，消除黑边 */
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .bottom-nav {
+                display: none !important; /* 打印时自动隐藏底部导航栏 */
+            }
+            .poster-container {
+                box-shadow: none !important; /* 去除阴影，让边缘更干净 */
+                margin: 0 auto 20px auto !important;
+                page-break-inside: avoid; /* 尽量防止一个模块被从中间切断 */
+            }
+        }
     </style>
 </head>
 <body>
