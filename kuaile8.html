@@ -178,6 +178,23 @@
             .poster-container { max-width: 480px; padding-top: 35px; }
             table { height: auto; }
         }
+
+        /* ==================== 打印/导出PDF 专属优化 ==================== */
+        @media print {
+            body {
+                background: #ffffff !important; /* 强制外围背景变白，消除黑边 */
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .bottom-nav {
+                display: none !important; /* 打印时自动隐藏底部导航栏 */
+            }
+            .poster-container {
+                box-shadow: none !important; /* 去除阴影，让边缘更干净 */
+                margin: 0 auto 20px auto !important;
+                page-break-inside: avoid; /* 尽量防止一个模块被从中间切断 */
+            }
+        }
     </style>
 </head>
 <body>
@@ -331,8 +348,8 @@
                             <td class="detail-col" style="border-top:2px solid #f57c00;">
                                 <span class="prize-item">中0个奖<span class="r-val">16元</span></span>
                                 <span class="prize-item">中1个奖<span class="r-val">2元</span></span>
-                                <span class="prize-item">中2个奖<span class="r-val">0元</span></span>
-                                <span class="prize-item">中3个奖<span class="r-val">0元</span></span>
+                                <span class="prize-item zero">中2个奖<span class="r-val">0元</span></span>
+                                <span class="prize-item zero">中3个奖<span class="r-val">0元</span></span>
                                 <span class="prize-item">中4个奖<span class="r-val">16元</span></span>
                                 <span class="prize-item">中5个奖<span class="r-val">110元</span></span>
                                 <span class="prize-item">中6个奖<span class="r-val">780元</span></span>
@@ -347,7 +364,7 @@
                                 <span class="prize-item">中0个奖<span class="r-val">72元</span></span>
                                 <span class="prize-item">中1个奖<span class="r-val">16元</span></span>
                                 <span class="prize-item">中2个奖<span class="r-val">2元</span></span>
-                                <span class="prize-item">中3个奖<span class="r-val">0元</span></span>
+                                <span class="prize-item zero">中3个奖<span class="r-val">0元</span></span>
                                 <span class="prize-item">中4个奖<span class="r-val">40元</span></span>
                                 <span class="prize-item">中5个奖<span class="r-val">260元</span></span>
                                 <span class="prize-item">中6个奖<span class="r-val">1500元</span></span>
@@ -364,7 +381,7 @@
                                 <span class="prize-item">中1个奖<span class="r-val">72元</span></span>
                                 <span class="prize-item">中2个奖<span class="r-val">16元</span></span>
                                 <span class="prize-item">中3个奖<span class="r-val">2元</span></span>
-                                <span class="prize-item">中4个奖<span class="r-val">0元</span></span>
+                                <span class="prize-item zero">中4个奖<span class="r-val">0元</span></span>
                                 <span class="prize-item">中5个奖<span class="r-val">500元</span></span>
                                 <span class="prize-item">中6个奖<span class="r-val">2520元</span></span>
                                 <span class="prize-item">中7个奖<span class="r-val">16830元</span></span>
@@ -395,8 +412,8 @@
                             <td class="detail-col">
                                 <span class="prize-item">中0个奖<span class="r-val">18元</span></span>
                                 <span class="prize-item">中1个奖<span class="r-val">2元</span></span>
-                                <span class="prize-item">中2个奖<span class="r-val">0元</span></span>
-                                <span class="prize-item">中3个奖<span class="r-val">0元</span></span>
+                                <span class="prize-item zero">中2个奖<span class="r-val">0元</span></span>
+                                <span class="prize-item zero">中3个奖<span class="r-val">0元</span></span>
                                 <span class="prize-item">中4个奖<span class="r-val">15元</span></span>
                                 <span class="prize-item">中5个奖<span class="r-val">55元</span></span>
                                 <span class="prize-item">中6个奖<span class="r-val">300元</span></span>
@@ -412,7 +429,7 @@
                                 <span class="prize-item">中0个奖<span class="r-val">90元</span></span>
                                 <span class="prize-item">中1个奖<span class="r-val">18元</span></span>
                                 <span class="prize-item">中2个奖<span class="r-val">2元</span></span>
-                                <span class="prize-item">中3个奖<span class="r-val">0元</span></span>
+                                <span class="prize-item zero">中3个奖<span class="r-val">0元</span></span>
                                 <span class="prize-item">中4个奖<span class="r-val">45元</span></span>
                                 <span class="prize-item">中5个奖<span class="r-val">175元</span></span>
                                 <span class="prize-item">中6个奖<span class="r-val">765元</span></span>
@@ -430,7 +447,7 @@
                                 <span class="prize-item">中1个奖<span class="r-val">90元</span></span>
                                 <span class="prize-item">中2个奖<span class="r-val">18元</span></span>
                                 <span class="prize-item">中3个奖<span class="r-val">2元</span></span>
-                                <span class="prize-item">中4个奖<span class="r-val">0元</span></span>
+                                <span class="prize-item zero">中4个奖<span class="r-val">0元</span></span>
                                 <span class="prize-item">中5个奖<span class="r-val">425元</span></span>
                                 <span class="prize-item">中6个奖<span class="r-val">1625元</span></span>
                                 <span class="prize-item">中7个奖<span class="r-val">7505元</span></span>
@@ -448,8 +465,8 @@
                             <td class="detail-col" style="border-top:2px solid #f57c00;">
                                 <span class="prize-item">中0个奖<span class="r-val">20元</span></span>
                                 <span class="prize-item">中1个奖<span class="r-val">2元</span></span>
-                                <span class="prize-item">中2个奖<span class="r-val">0元</span></span>
-                                <span class="prize-item">中3个奖<span class="r-val">0元</span></span>
+                                <span class="prize-item zero">中2个奖<span class="r-val">0元</span></span>
+                                <span class="prize-item zero">中3个奖<span class="r-val">0元</span></span>
                                 <span class="prize-item">中4个奖<span class="r-val">18元</span></span>
                                 <span class="prize-item">中5个奖<span class="r-val">40元</span></span>
                                 <span class="prize-item">中6个奖<span class="r-val">118元</span></span>
@@ -466,7 +483,7 @@
                                 <span class="prize-item">中0个奖<span class="r-val">110元</span></span>
                                 <span class="prize-item">中1个奖<span class="r-val">20元</span></span>
                                 <span class="prize-item">中2个奖<span class="r-val">2元</span></span>
-                                <span class="prize-item">中3个奖<span class="r-val">0元</span></span>
+                                <span class="prize-item zero">中3个奖<span class="r-val">0元</span></span>
                                 <span class="prize-item">中4个奖<span class="r-val">63元</span></span>
                                 <span class="prize-item">中5个奖<span class="r-val">165元</span></span>
                                 <span class="prize-item">中6个奖<span class="r-val">415元</span></span>
@@ -485,7 +502,7 @@
                                 <span class="prize-item">中1个奖<span class="r-val">110元</span></span>
                                 <span class="prize-item">中2个奖<span class="r-val">20元</span></span>
                                 <span class="prize-item">中3个奖<span class="r-val">2元</span></span>
-                                <span class="prize-item">中4个奖<span class="r-val">0元</span></span>
+                                <span class="prize-item zero">中4个奖<span class="r-val">0元</span></span>
                                 <span class="prize-item">中5个奖<span class="r-val">490元</span></span>
                                 <span class="prize-item">中6个奖<span class="r-val">1160元</span></span>
                                 <span class="prize-item">中7个奖<span class="r-val">4420元</span></span>
@@ -504,9 +521,9 @@
                             <td class="detail-col" style="border-top:2px solid #f57c00;">
                                 <span class="prize-item">中0个奖<span class="r-val">22元</span></span>
                                 <span class="prize-item">中1个奖<span class="r-val">2元</span></span>
-                                <span class="prize-item">中2个奖<span class="r-val">0元</span></span>
-                                <span class="prize-item">中3个奖<span class="r-val">0元</span></span>
-                                <span class="prize-item">中4个奖<span class="r-val">0元</span></span>
+                                <span class="prize-item zero">中2个奖<span class="r-val">0元</span></span>
+                                <span class="prize-item zero">中3个奖<span class="r-val">0元</span></span>
+                                <span class="prize-item zero">中4个奖<span class="r-val">0元</span></span>
                                 <span class="prize-item">中5个奖<span class="r-val">18元</span></span>
                                 <span class="prize-item">中6个奖<span class="r-val">43元</span></span>
                                 <span class="prize-item">中7个奖<span class="r-val">355元</span></span>
@@ -523,8 +540,8 @@
                                 <span class="prize-item">中0个奖<span class="r-val">132元</span></span>
                                 <span class="prize-item">中1个奖<span class="r-val">22元</span></span>
                                 <span class="prize-item">中2个奖<span class="r-val">2元</span></span>
-                                <span class="prize-item">中3个奖<span class="r-val">0元</span></span>
-                                <span class="prize-item">中4个奖<span class="r-val">0元</span></span>
+                                <span class="prize-item zero">中3个奖<span class="r-val">0元</span></span>
+                                <span class="prize-item zero">中4个奖<span class="r-val">0元</span></span>
                                 <span class="prize-item">中5个奖<span class="r-val">63元</span></span>
                                 <span class="prize-item">中6个奖<span class="r-val">183元</span></span>
                                 <span class="prize-item">中7个奖<span class="r-val">1038元</span></span>
@@ -543,7 +560,7 @@
                                 <span class="prize-item">中1个奖<span class="r-val">132元</span></span>
                                 <span class="prize-item">中2个奖<span class="r-val">22元</span></span>
                                 <span class="prize-item">中3个奖<span class="r-val">2元</span></span>
-                                <span class="prize-item">中4个奖<span class="r-val">0元</span></span>
+                                <span class="prize-item zero">中4个奖<span class="r-val">0元</span></span>
                                 <span class="prize-item">中5个奖<span class="r-val">168元</span></span>
                                 <span class="prize-item">中6个奖<span class="r-val">553元</span></span>
                                 <span class="prize-item">中7个奖<span class="r-val">2503元</span></span>
