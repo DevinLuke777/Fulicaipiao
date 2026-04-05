@@ -149,7 +149,7 @@
     <div class="poster-container">
 
         <div class="section-card">
-            <div class="section-header">单选单胆拖</div>
+            <div class="section-header">单选全胆拖</div>
             <div class="rule-container">
                 <div class="rule-explanation">【 含对子 】</div>
             </div>
