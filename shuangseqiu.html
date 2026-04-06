@@ -36,7 +36,8 @@
             background: linear-gradient(135deg, var(--lucky-red) 0%, #c62828 100%);
             width: 100%;
             max-width: 420px; 
-            padding: 15px 4px 6px 4px; /* 上边距缩小，仅留出基本安全区 */
+            /* 底部稍微增加到20px，给提示语提供舒适的悬浮空间 */
+            padding: 15px 4px 20px 4px; 
             border: 2px double var(--gold);
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.8);
@@ -158,6 +159,21 @@
             font-size: 0.72rem;
             font-weight: 900;
             margin: 0 1px;
+        }
+
+        /* 悬浮提示语，位置完美居中于底部红色区域 */
+        .footer-disclaimer {
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 0.65rem;
+            color: rgba(255, 215, 0, 0.85);
+            letter-spacing: 1px;
+            z-index: 10;
+            pointer-events: none;
+            line-height: 1.2;
         }
 
         /* ==================== 打印/导出PDF 专属优化 ==================== */
@@ -347,6 +363,8 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="footer-disclaimer">本表仅供参考，实际中奖金额以投注机兑奖为准!</div>
 
     </div>
 
