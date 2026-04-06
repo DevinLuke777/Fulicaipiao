@@ -25,7 +25,7 @@
             font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
             display: flex;
             justify-content: center;
-            align-items: center; 
+            align-items: flex-start; /* 顶部对齐 */
             padding: 5px; 
             min-height: 100vh;
             margin: 0;
@@ -36,13 +36,14 @@
             background: linear-gradient(135deg, var(--lucky-red) 0%, #c62828 100%);
             width: 100%;
             max-width: 420px; 
-            /* 顶部保留刘海/安全余量 */
-            padding: 45px 8px 10px 8px; 
+            /* 顶部保留刘海/安全余量，适配大标题 */
+            padding: 24px 8px 10px 8px; 
             border: 3px double var(--gold);
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.8);
             position: relative;
             overflow: hidden;
+            margin-top: 5px;
         }
 
         /* 变淡的水印 */
@@ -58,6 +59,17 @@
         }
 
         .poster-container > * { position: relative; z-index: 1; }
+
+        /* 极简大标题 */
+        .header-title { text-align: center; margin-bottom: 18px; }
+        .header-title h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--gold);
+            letter-spacing: 4px;
+            margin: 0;
+            text-shadow: 0 2px 0 #b71c1c, 0 3px 5px rgba(0,0,0,0.6);
+        }
 
         /* 内容区块紧凑排版 */
         .section-card {
@@ -163,6 +175,10 @@
 <body>
 
     <div class="poster-container">
+
+        <div class="header-title">
+            <h1>福彩3D 胆拖玩法明细</h1>
+        </div>
 
         <div class="section-card">
             <div class="section-header">单选全胆拖</div>
