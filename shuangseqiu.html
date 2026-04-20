@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>双色球复式 - 极限一屏压缩版</title>
+    <title>双色球复式 - A4横向撑满版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
@@ -26,30 +26,29 @@
             display: flex;
             justify-content: center;
             align-items: flex-start; 
-            padding: 2px; 
+            padding: 4px; 
             min-height: 100vh;
             margin: 0;
         }
 
-        /* 极限压缩外层容器 */
+        /* 核心修改：大幅拉宽 max-width，完美贴合A4横向，消灭左右白边 */
         .poster-container {
             background: linear-gradient(135deg, var(--lucky-red) 0%, #c62828 100%);
             width: 100%;
-            max-width: 420px; 
-            /* 底部稍微增加到20px，给提示语提供舒适的悬浮空间 */
-            padding: 15px 4px 20px 4px; 
-            border: 2px double var(--gold);
+            max-width: 840px; /* 从660px放大到840px，横向完全撑开 */
+            padding: 10px 10px 18px 10px; /* 保持上下极度压缩 */
+            border: 3px double var(--gold);
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.8);
             position: relative;
             overflow: hidden;
-            margin-top: 5px;
+            margin-top: 2px;
         }
 
         .poster-container::before {
             content: "💰";
             position: absolute;
-            font-size: 15rem;
+            font-size: 25rem;
             color: rgba(255, 215, 0, 0.04);
             top: 50%; left: 50%;
             transform: translate(-50%, -50%) rotate(-15deg);
@@ -59,69 +58,48 @@
 
         .poster-container > * { position: relative; z-index: 1; }
 
-        /* 头部标题极限压缩 */
-        .header-title { text-align: center; margin-bottom: 15px; }
+        /* 标题适度放大，填满横向 */
+        .header-title { text-align: center; margin-bottom: 8px; }
         .header-title h1 {
-            font-size: 1.6rem;
+            font-size: 2rem; 
             font-weight: 900;
             color: var(--gold);
-            letter-spacing: 2px;
+            letter-spacing: 4px;
             margin: 0;
             text-shadow: 0 2px 0 #b71c1c;
         }
 
-        /* 内容区块紧凑排版 */
+        /* 内容区块紧凑 */
         .section-card {
             background: #fff;
             border: 2px solid var(--gold);
             border-radius: 6px;
-            margin-bottom: 2px; 
-            padding: 16px 2px 2px 2px; /* 压榨四周空白 */
+            padding: 2px; 
             position: relative;
         }
 
-        /* 标题横条 */
-        .section-header {
-            background: linear-gradient(to right, #d32f2f, #f44336, #d32f2f);
-            color: var(--gold);
-            width: 70%; 
-            padding: 2px 0; 
-            border-radius: 4px 4px 0 0;
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1rem;
-            font-weight: 900;
-            letter-spacing: 2px; 
-            border: 1px solid var(--gold);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-            white-space: nowrap;
-            text-align: center;
-        }
-
-        /* 表格排版：极限列宽调配 */
+        /* 表格排版：保留高度极限压榨，但横向放开 */
         table {
             width: 100%;
             border-collapse: collapse;
             background: var(--light-gold);
-            border: 1px solid #ffca28;
+            border: 2px solid #ffca28;
             table-layout: fixed;
         }
         th {
             background: var(--gold) !important;
             color: var(--dark-red);
             font-weight: 900;
-            font-size: 0.8rem; 
-            padding: 2px 1px;
-            border-bottom: 1px solid #f57c00;
+            font-size: 1.1rem; /* 放大表头 */
+            padding: 4px 2px; 
+            border-bottom: 2px solid #f57c00;
             border-right: 1px solid #f57c00;
             line-height: 1.1;
         }
         th:last-child { border-right: none; }
         
         td {
-            padding: 2px 1px; /* 单元格上下边距压缩到2px */
+            padding: 2px 2px; /* 高度依然紧凑 */
             text-align: center;
             border-bottom: 1px solid #f57c00;
             border-right: 1px solid #f57c00;
@@ -132,61 +110,106 @@
         td:last-child { border-right: none; }
         tr:nth-child(even) td { background-color: #fff9c4 !important; }
 
-        /* 左侧两列特写 */
-        .type-col { font-size: 0.95rem; color: #000; font-family: 'Arial Black', sans-serif;}
-        .price-col { color: #1b5e20; font-size: 0.95rem; }
+        /* 字体全线同步拉大，避免留白过多 */
+        .type-col { font-size: 1.25rem; color: #000; font-family: 'Arial Black', sans-serif;}
         
-        /* 详情列排版：高度压缩核心 */
-        .detail-col {
-            text-align: left !important;
-            font-size: 0.68rem; /* 字体缩至极限仍可读 */
-            font-weight: 700;
-            line-height: 1.15;  /* 行高极度收紧 */
-            padding: 3px 4px !important;
-            letter-spacing: -0.2px;
+        .price-col { 
+            color: #1b5e20; 
+            font-size: 1.5rem; 
+            line-height: 0.95; 
+            font-family: 'Arial Black', sans-serif;
+            padding-top: 4px !important;
         }
         
-        /* 强制绑定词组，防止断行拆字，并用右边距替代分号节省空间 */
-        .prize-item {
-            display: inline-block;
-            white-space: nowrap; 
-            margin-right: 4px; 
-            margin-bottom: 1px;
-        }
-        
-        .detail-col .r-val {
-            color: var(--lucky-red);
-            font-size: 0.72rem;
-            font-weight: 900;
-            margin: 0 1px;
+        .price-col.small-text {
+            font-size: 1.2rem !important; 
         }
 
-        /* 悬浮提示语，位置完美居中于底部红色区域 */
+        .price-unit {
+            font-size: 1.05rem; 
+            color: #555;
+            font-weight: 900;
+        }
+        
+        /* 详情列布局 */
+        .detail-col {
+            text-align: left !important;
+            padding: 4px 6px !important; 
+        }
+
+        .detail-inner {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px 2%; /* 微调缝隙 */
+        }
+        
+        /* 奖金小方块放大填充左右空间 */
+        .prize-item {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            gap: 6px; 
+            width: 49%; 
+            box-sizing: border-box;
+            background: rgba(218, 37, 29, 0.05); 
+            border: 1px solid rgba(218, 37, 29, 0.12);
+            padding: 2px 6px; 
+            border-radius: 4px;
+            font-size: 0.95rem; /* 字号加大 */
+            font-weight: 700;
+            color: #333;
+            line-height: 1.2;
+        }
+        
+        /* 一二等奖占满一行 */
+        .prize-item.long {
+            width: 100%;
+            justify-content: center; 
+            gap: 12px; 
+            background: rgba(255, 215, 0, 0.15); 
+            border: 1px solid rgba(255, 202, 40, 0.5);
+        }
+        
+        /* 奖金红色数字 */
+        .detail-col .r-val {
+            color: var(--lucky-red);
+            font-size: 1.05rem; /* 放大 */
+            font-weight: 900;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        /* 悬浮提示语 */
         .footer-disclaimer {
             position: absolute;
-            bottom: 5px;
+            bottom: 4px;
             left: 0;
             width: 100%;
             text-align: center;
-            font-size: 0.65rem;
-            color: rgba(255, 215, 0, 0.85);
+            font-size: 0.75rem;
+            color: rgba(255, 215, 0, 0.9);
             letter-spacing: 1px;
             z-index: 10;
             pointer-events: none;
-            line-height: 1.2;
         }
 
         /* ==================== 打印/导出PDF 专属优化 ==================== */
         @media print {
             body {
-                background: #ffffff !important; /* 强制外围背景变白，消除黑边 */
+                background: #ffffff !important; 
                 padding: 0 !important;
                 margin: 0 !important;
             }
             .poster-container {
-                box-shadow: none !important; /* 去除阴影，让边缘更干净 */
+                box-shadow: none !important; 
                 margin: 0 auto !important;
-                page-break-inside: avoid; /* 尽量防止被从中间切断 */
+                max-width: 100% !important; 
+                width: 100% !important; /* 强制撑满纸张宽度 */
+                page-break-inside: avoid; 
+                border-radius: 0 !important;
+            }
+            td, span, div {
+                letter-spacing: normal !important;
+                word-spacing: normal !important;
             }
         }
     </style>
@@ -196,168 +219,200 @@
     <div class="poster-container">
         
         <div class="header-title">
-            <h1>双色球复式玩法明细</h1>
+            <h1>双色球复式投注中奖明细</h1>
         </div>
 
         <div class="section-card">
-            <div class="section-header">双色球复式奖金对照</div>
             <table>
                 <thead>
                     <tr>
-                        <th width="12%">投注</th>
-                        <th width="15%">投入</th>
-                        <th width="73%">中奖详情</th>
+                        <th width="14%">投注</th>
+                        <th width="11%">投入</th>
+                        <th width="75%">中奖详情</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="type-col">7+1</td>
-                        <td class="price-col">14元</td>
+                        <td class="type-col">6+16</td>
+                        <td class="price-col">32<br><span class="price-unit">元</span></td>
                         <td class="detail-col">
-                            <span class="prize-item">中蓝球<span class="r-val">奖35元</span></span>
-                            <span class="prize-item">中3+0<span class="r-val">奖20元</span></span>
-                            <span class="prize-item">中3+1<span class="r-val">奖55元</span></span>
-                            <span class="prize-item">中4+0<span class="r-val">奖30元</span></span>
-                            <span class="prize-item">中4+1<span class="r-val">奖640元</span></span>
-                            <span class="prize-item">中5+0<span class="r-val">奖450元</span></span>
-                            <span class="prize-item">中5+1<span class="r-val">奖7000元</span></span>
-                            <span class="prize-item">中6+0 <span class="r-val">奖1个二等奖+1200元</span></span>
-                            <span class="prize-item">中6+1 <span class="r-val">奖1个一等奖+18000元</span></span>
+                            <div class="detail-inner">
+                                <span class="prize-item">中蓝球<span class="r-val">奖5元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">奖85元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">奖350元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">奖6000元</span></span>
+                                <span class="prize-item long">中6+1 <span class="r-val">奖1个一等奖+15个二等奖</span></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="type-col">7+1</td>
+                        <td class="price-col">14<br><span class="price-unit">元</span></td>
+                        <td class="detail-col">
+                            <div class="detail-inner">
+                                <span class="prize-item">中蓝球<span class="r-val">奖35元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">奖20元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">奖55元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">奖30元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">奖640元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">奖450元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">奖7000元</span></span>
+                                <span class="prize-item long">中6+0 <span class="r-val">奖1个二等奖+1200元</span></span>
+                                <span class="prize-item long">中6+1 <span class="r-val">奖1个一等奖+18000元</span></span>
+                            </div>
                         </td>
                     </tr>
                     <tr>
                         <td class="type-col">7+2</td>
-                        <td class="price-col">28元</td>
+                        <td class="price-col">28<br><span class="price-unit">元</span></td>
                         <td class="detail-col">
-                            <span class="prize-item">中蓝球<span class="r-val">奖35元</span></span>
-                            <span class="prize-item">中3+0<span class="r-val">奖40元</span></span>
-                            <span class="prize-item">中3+1<span class="r-val">奖55元</span></span>
-                            <span class="prize-item">中4+0<span class="r-val">奖60元</span></span>
-                            <span class="prize-item">中4+1<span class="r-val">奖670元</span></span>
-                            <span class="prize-item">中5+0<span class="r-val">奖900元</span></span>
-                            <span class="prize-item">中5+1<span class="r-val">奖7450元</span></span>
-                            <span class="prize-item">中6+0 <span class="r-val">奖2个二等奖+2400元</span></span>
-                            <span class="prize-item">中6+1 <span class="r-val">奖1个一等奖+1个二等奖+19200元</span></span>
+                            <div class="detail-inner">
+                                <span class="prize-item">中蓝球<span class="r-val">奖35元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">奖40元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">奖55元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">奖60元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">奖670元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">奖900元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">奖7450元</span></span>
+                                <span class="prize-item long">中6+0 <span class="r-val">奖2个二等奖+2400元</span></span>
+                                <span class="prize-item long">中6+1 <span class="r-val">奖1个一等奖+1个二等奖+19200元</span></span>
+                            </div>
                         </td>
                     </tr>
                     <tr>
                         <td class="type-col">8+1</td>
-                        <td class="price-col">56元</td>
+                        <td class="price-col">56<br><span class="price-unit">元</span></td>
                         <td class="detail-col">
-                            <span class="prize-item">中蓝球<span class="r-val">奖140元</span></span>
-                            <span class="prize-item">中3+0<span class="r-val">奖50元</span></span>
-                            <span class="prize-item">中3+1<span class="r-val">奖190元</span></span>
-                            <span class="prize-item">中4+0<span class="r-val">奖60元</span></span>
-                            <span class="prize-item">中4+1<span class="r-val">奖1390元</span></span>
-                            <span class="prize-item">中5+0<span class="r-val">奖750元</span></span>
-                            <span class="prize-item">中5+1<span class="r-val">奖12100元</span></span>
-                            <span class="prize-item">中6+0 <span class="r-val">奖1个二等奖+2550元</span></span>
-                            <span class="prize-item">中6+1 <span class="r-val">奖1个一等奖+39000元</span></span>
+                            <div class="detail-inner">
+                                <span class="prize-item">中蓝球<span class="r-val">奖140元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">奖50元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">奖190元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">奖60元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">奖1390元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">奖750元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">奖12100元</span></span>
+                                <span class="prize-item long">中6+0 <span class="r-val">奖1个二等奖+2550元</span></span>
+                                <span class="prize-item long">中6+1 <span class="r-val">奖1个一等奖+39000元</span></span>
+                            </div>
                         </td>
                     </tr>
                     <tr>
                         <td class="type-col">8+2</td>
-                        <td class="price-col">112元</td>
+                        <td class="price-col">112<br><span class="price-unit">元</span></td>
                         <td class="detail-col">
-                            <span class="prize-item">中蓝球<span class="r-val">奖140元</span></span>
-                            <span class="prize-item">中3+0<span class="r-val">奖100元</span></span>
-                            <span class="prize-item">中3+1<span class="r-val">奖190元</span></span>
-                            <span class="prize-item">中4+0<span class="r-val">奖120元</span></span>
-                            <span class="prize-item">中4+1<span class="r-val">奖1450元</span></span>
-                            <span class="prize-item">中5+0<span class="r-val">奖1500元</span></span>
-                            <span class="prize-item">中5+1<span class="r-val">奖12850元</span></span>
-                            <span class="prize-item">中6+0 <span class="r-val">奖2个二等奖+5100元</span></span>
-                            <span class="prize-item">中6+1 <span class="r-val">奖1个一等奖+1个二等奖+41550元</span></span>
+                            <div class="detail-inner">
+                                <span class="prize-item">中蓝球<span class="r-val">奖140元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">奖100元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">奖190元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">奖120元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">奖1450元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">奖1500元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">奖12850元</span></span>
+                                <span class="prize-item long">中6+0 <span class="r-val">奖2个二等奖+5100元</span></span>
+                                <span class="prize-item long">中6+1 <span class="r-val">奖1个一等奖+1个二等奖+41550元</span></span>
+                            </div>
                         </td>
                     </tr>
                     <tr>
                         <td class="type-col">9+1</td>
-                        <td class="price-col">168元</td>
+                        <td class="price-col">168<br><span class="price-unit">元</span></td>
                         <td class="detail-col">
-                            <span class="prize-item">中蓝球<span class="r-val">奖420元</span></span>
-                            <span class="prize-item">中3+0<span class="r-val">奖100元</span></span>
-                            <span class="prize-item">中3+1<span class="r-val">奖520元</span></span>
-                            <span class="prize-item">中4+0<span class="r-val">奖100元</span></span>
-                            <span class="prize-item">中4+1<span class="r-val">奖2570元</span></span>
-                            <span class="prize-item">中5+0<span class="r-val">奖1100元</span></span>
-                            <span class="prize-item">中5+1<span class="r-val">奖18450元</span></span>
-                            <span class="prize-item">中6+0 <span class="r-val">奖1个二等奖+4050元</span></span>
-                            <span class="prize-item">中6+1 <span class="r-val">奖1个一等奖+63200元</span></span>
+                            <div class="detail-inner">
+                                <span class="prize-item">中蓝球<span class="r-val">奖420元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">奖100元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">奖520元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">奖100元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">奖2570元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">奖1100元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">奖18450元</span></span>
+                                <span class="prize-item long">中6+0 <span class="r-val">奖1个二等奖+4050元</span></span>
+                                <span class="prize-item long">中6+1 <span class="r-val">奖1个一等奖+63200元</span></span>
+                            </div>
                         </td>
                     </tr>
                     <tr>
                         <td class="type-col">9+2</td>
-                        <td class="price-col">336元</td>
+                        <td class="price-col">336<br><span class="price-unit">元</span></td>
                         <td class="detail-col">
-                            <span class="prize-item">中蓝球<span class="r-val">奖420元</span></span>
-                            <span class="prize-item">中3+0<span class="r-val">奖200元</span></span>
-                            <span class="prize-item">中3+1<span class="r-val">奖520元</span></span>
-                            <span class="prize-item">中4+0<span class="r-val">奖200元</span></span>
-                            <span class="prize-item">中4+1<span class="r-val">奖2670元</span></span>
-                            <span class="prize-item">中5+0<span class="r-val">奖2200元</span></span>
-                            <span class="prize-item">中5+1<span class="r-val">奖19550元</span></span>
-                            <span class="prize-item">中6+0 <span class="r-val">奖2个二等奖+8100元</span></span>
-                            <span class="prize-item">中6+1 <span class="r-val">奖1个一等奖+1个二等奖+67250元</span></span>
+                            <div class="detail-inner">
+                                <span class="prize-item">中蓝球<span class="r-val">奖420元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">奖200元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">奖520元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">奖200元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">奖2670元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">奖2200元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">奖19550元</span></span>
+                                <span class="prize-item long">中6+0 <span class="r-val">奖2个二等奖+8100元</span></span>
+                                <span class="prize-item long">中6+1 <span class="r-val">奖1个一等奖+1个二等奖+67250元</span></span>
+                            </div>
                         </td>
                     </tr>
                     <tr>
                         <td class="type-col">10+1</td>
-                        <td class="price-col">420元</td>
+                        <td class="price-col">420<br><span class="price-unit">元</span></td>
                         <td class="detail-col">
-                            <span class="prize-item">中蓝球<span class="r-val">奖1050元</span></span>
-                            <span class="prize-item">中3+0<span class="r-val">奖175元</span></span>
-                            <span class="prize-item">中3+1<span class="r-val">奖1225元</span></span>
-                            <span class="prize-item">中4+0<span class="r-val">奖150元</span></span>
-                            <span class="prize-item">中4+1<span class="r-val">奖4375元</span></span>
-                            <span class="prize-item">中5+0<span class="r-val">奖1500元</span></span>
-                            <span class="prize-item">中5+1<span class="r-val">奖26275元</span></span>
-                            <span class="prize-item">中6+0 <span class="r-val">奖1个二等奖+5700元</span></span>
-                            <span class="prize-item">中6+1 <span class="r-val">奖1个一等奖+90875元</span></span>
+                            <div class="detail-inner">
+                                <span class="prize-item">中蓝球<span class="r-val">奖1050元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">奖175元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">奖1225元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">奖150元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">奖4375元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">奖1500元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">奖26275元</span></span>
+                                <span class="prize-item long">中6+0 <span class="r-val">奖1个二等奖+5700元</span></span>
+                                <span class="prize-item long">中6+1 <span class="r-val">奖1个一等奖+90875元</span></span>
+                            </div>
                         </td>
                     </tr>
                     <tr>
                         <td class="type-col">10+2</td>
-                        <td class="price-col">840元</td>
+                        <td class="price-col">840<br><span class="price-unit">元</span></td>
                         <td class="detail-col">
-                            <span class="prize-item">中蓝球<span class="r-val">奖1050元</span></span>
-                            <span class="prize-item">中3+0<span class="r-val">奖350元</span></span>
-                            <span class="prize-item">中3+1<span class="r-val">奖1225元</span></span>
-                            <span class="prize-item">中4+0<span class="r-val">奖300元</span></span>
-                            <span class="prize-item">中4+1<span class="r-val">奖4525元</span></span>
-                            <span class="prize-item">中5+0<span class="r-val">奖3000元</span></span>
-                            <span class="prize-item">中5+1<span class="r-val">奖27775元</span></span>
-                            <span class="prize-item">中6+0 <span class="r-val">奖2个二等奖+11400元</span></span>
-                            <span class="prize-item">中6+1 <span class="r-val">奖1个一等奖+1个二等奖+96575元</span></span>
+                            <div class="detail-inner">
+                                <span class="prize-item">中蓝球<span class="r-val">奖1050元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">奖350元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">奖1225元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">奖300元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">奖4525元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">奖3000元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">奖27775元</span></span>
+                                <span class="prize-item long">中6+0 <span class="r-val">奖2个二等奖+11400元</span></span>
+                                <span class="prize-item long">中6+1 <span class="r-val">奖1个一等奖+1个二等奖+96575元</span></span>
+                            </div>
                         </td>
                     </tr>
                     <tr>
                         <td class="type-col">11+1</td>
-                        <td class="price-col">924元</td>
+                        <td class="price-col">924<br><span class="price-unit">元</span></td>
                         <td class="detail-col">
-                            <span class="prize-item">中蓝球<span class="r-val">奖2310元</span></span>
-                            <span class="prize-item">中3+0<span class="r-val">奖280元</span></span>
-                            <span class="prize-item">中3+1<span class="r-val">奖2590元</span></span>
-                            <span class="prize-item">中4+0<span class="r-val">奖210元</span></span>
-                            <span class="prize-item">中4+1<span class="r-val">奖7105元</span></span>
-                            <span class="prize-item">中5+0<span class="r-val">奖1950元</span></span>
-                            <span class="prize-item">中5+1<span class="r-val">奖35905元</span></span>
-                            <span class="prize-item">中6+0 <span class="r-val">奖1个二等奖+7500元</span></span>
-                            <span class="prize-item">中6+1 <span class="r-val">奖1个一等奖+122405元</span></span>
+                            <div class="detail-inner">
+                                <span class="prize-item">中蓝球<span class="r-val">奖2310元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">奖280元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">奖2590元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">奖210元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">奖7105元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">奖1950元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">奖35905元</span></span>
+                                <span class="prize-item long">中6+0 <span class="r-val">奖1个二等奖+7500元</span></span>
+                                <span class="prize-item long">中6+1 <span class="r-val">奖1个一等奖+122405元</span></span>
+                            </div>
                         </td>
                     </tr>
                     <tr>
                         <td class="type-col">11+2</td>
-                        <td class="price-col">1848元</td>
+                        <td class="price-col small-text">1848<br><span class="price-unit">元</span></td>
                         <td class="detail-col">
-                            <span class="prize-item">中蓝球<span class="r-val">奖2310元</span></span>
-                            <span class="prize-item">中3+0<span class="r-val">奖560元</span></span>
-                            <span class="prize-item">中3+1<span class="r-val">奖2590元</span></span>
-                            <span class="prize-item">中4+0<span class="r-val">奖420元</span></span>
-                            <span class="prize-item">中4+1<span class="r-val">奖7315元</span></span>
-                            <span class="prize-item">中5+0<span class="r-val">奖3900元</span></span>
-                            <span class="prize-item">中5+1<span class="r-val">奖37855元</span></span>
-                            <span class="prize-item">中6+0 <span class="r-val">奖2个二等奖+15000元</span></span>
-                            <span class="prize-item">中6+1 <span class="r-val">奖1个一等奖+1个二等奖+129905元</span></span>
+                            <div class="detail-inner">
+                                <span class="prize-item">中蓝球<span class="r-val">奖2310元</span></span>
+                                <span class="prize-item">中3+0<span class="r-val">奖560元</span></span>
+                                <span class="prize-item">中3+1<span class="r-val">奖2590元</span></span>
+                                <span class="prize-item">中4+0<span class="r-val">奖420元</span></span>
+                                <span class="prize-item">中4+1<span class="r-val">奖7315元</span></span>
+                                <span class="prize-item">中5+0<span class="r-val">奖3900元</span></span>
+                                <span class="prize-item">中5+1<span class="r-val">奖37855元</span></span>
+                                <span class="prize-item long">中6+0 <span class="r-val">奖2个二等奖+15000元</span></span>
+                                <span class="prize-item long">中6+1 <span class="r-val">奖1个一等奖+1个二等奖+129905元</span></span>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
