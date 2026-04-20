@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>3D 胆拖玩法 - 极限一屏版</title>
+    <title>3D 胆拖玩法 - A4打印大字紧凑版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
@@ -12,8 +12,10 @@
             --gold: #ffd700;
             --pure-yellow: #FFFF00;
             --text-dark: #333333;
+            --light-gold: #fffde7;
         }
 
+        /* 强制保留打印颜色 */
         html {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
@@ -25,32 +27,31 @@
             font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* 顶部对齐 */
-            padding: 5px; 
+            align-items: flex-start; 
+            padding: 15px 5px; 
             min-height: 100vh;
             margin: 0;
         }
 
-        /* 移动端紧凑卡片容器 */
+        /* 海报外层容器 */
         .poster-container {
             background: linear-gradient(135deg, var(--lucky-red) 0%, #c62828 100%);
             width: 100%;
-            max-width: 420px; 
-            /* 顶部保留刘海/安全余量，适配大标题 */
-            padding: 24px 8px 10px 8px; 
-            border: 3px double var(--gold);
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+            max-width: 680px; 
+            padding: 25px 12px 20px 12px; /* 稍微压缩顶部边距 */
+            border: 4px double var(--gold);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
             position: relative;
             overflow: hidden;
             margin-top: 5px;
         }
 
-        /* 变淡的水印 */
+        /* 背景水印 */
         .poster-container::before {
             content: "💰";
             position: absolute;
-            font-size: 15rem;
+            font-size: 20rem;
             color: rgba(255, 215, 0, 0.04);
             top: 50%; left: 50%;
             transform: translate(-50%, -50%) rotate(-15deg);
@@ -60,49 +61,65 @@
 
         .poster-container > * { position: relative; z-index: 1; }
 
-        /* 极简大标题 */
-        .header-title { text-align: center; margin-bottom: 18px; }
+        /* ====== 主标题 ====== */
+        .header-title { 
+            margin-bottom: 20px; /* 压缩标题下边距 */
+        }
         .header-title h1 {
-            font-size: 1.8rem;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-size: 2.2rem; 
             font-weight: 900;
-            color: var(--gold);
-            letter-spacing: 4px;
+            color: var(--gold); 
+            letter-spacing: 2px;
             margin: 0;
-            text-shadow: 0 2px 0 #b71c1c, 0 3px 5px rgba(0,0,0,0.6);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5); 
+        }
+        
+        .highlight-3d {
+            font-size: 1.8em; 
+            font-family: 'Arial Black', sans-serif;
+            color: var(--gold); 
+            margin: 0 12px; 
+            line-height: 1; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5); 
         }
 
-        /* 内容区块紧凑排版 */
-        .section-card {
+        /* 统一的白色大底板：极限压缩白色空隙 */
+        .main-card {
             background: #fff;
-            border: 2px solid var(--gold);
-            border-radius: 6px;
-            margin-bottom: 22px; 
-            padding: 26px 4px 3px 4px; /* 顶部留足呼吸空间防止遮挡 */
-            position: relative;
+            border: 3px solid var(--gold);
+            border-radius: 8px;
+            padding: 8px 6px; /* 核心压缩：四周白色空隙降到最低 */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
-        /* 标题背景条 */
-        .section-header {
-            background: linear-gradient(to right, #d32f2f, #f44336, #d32f2f);
-            color: var(--gold);
-            width: auto; 
-            padding: 4px 25px; 
-            border-radius: 6px 6px 0 0;
-            position: absolute;
-            top: -16px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.15rem;
+        /* 玩法区块间距：玩法之间挨得紧密点 */
+        .play-block {
+            margin-bottom: 8px; /* 核心压缩：大幅减少玩法之间的留白 */
+        }
+        .play-block:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 标题行：完美居中，紧贴表格 */
+        .section-title-row {
+            display: flex;
+            justify-content: center; /* 绝对水平居中 */
+            align-items: center; /* 绝对垂直居中 */
+            gap: 15px; 
+            margin-bottom: 6px; /* 压缩与下方表格的距离 */
+        }
+
+        /* 纯文字红字标题：字号大幅放大 */
+        .clean-title {
+            color: var(--lucky-red);
+            font-size: 1.8rem; /* 核心放大：从 1.5rem 加大到 1.8rem */
             font-weight: 900;
-            letter-spacing: 2px; /* 胆拖标题稍微长点，字间距微微调小适应 */
-            border: 1px solid var(--gold);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            white-space: nowrap;
-            text-align: center;
+            letter-spacing: 2px;
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
         }
-
-        /* 玩法说明高亮 */
-        .rule-container { text-align: center; margin-top: 2px; margin-bottom: 6px; }
 
         @keyframes pulse-glow {
             0% { box-shadow: 0 0 2px var(--pure-yellow); }
@@ -110,22 +127,21 @@
             100% { box-shadow: 0 0 2px var(--pure-yellow); }
         }
 
-        .rule-explanation {
-            display: inline-block;
+        /* 玩法说明黄色徽章：同步放大 */
+        .block-rule {
             background: var(--pure-yellow);
             color: var(--lucky-red);
-            font-size: 0.85rem; 
+            font-size: 1.25rem; /* 核心放大：从 1.05rem 加大到 1.25rem */
             font-weight: 900;
-            padding: 2px 8px;
-            border-radius: 4px;
+            padding: 4px 16px;
+            border-radius: 20px; 
             border: 2px solid #000;
             box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
             letter-spacing: 0.5px;
             animation: pulse-glow 1.5s infinite ease-in-out;
-            white-space: nowrap;
         }
 
-        /* 表格极限压缩排版 */
+        /* 表格排版 */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -136,39 +152,45 @@
             background: var(--gold) !important;
             color: var(--dark-red);
             font-weight: 900;
-            font-size: 0.85rem; 
-            padding: 3px 2px;
+            font-size: 1.2rem; 
+            padding: 6px 2px;
             border-bottom: 2px solid #f57c00;
-            line-height: 1.1;
+            border-right: 1px solid #f57c00;
         }
+        th:last-child { border-right: none; }
+        
         td {
-            padding: 2px 1px; 
+            padding: 8px 2px; 
             text-align: center;
-            border-bottom: 1px dashed #f57c00;
-            font-size: 0.95rem; 
+            border-bottom: 1px solid #f57c00; 
+            border-right: 1px solid #f57c00;
+            font-size: 1.2rem; 
             font-weight: 800;
             background-color: #fffde7 !important; 
-            line-height: 1.2;
+            vertical-align: middle;
         }
+        td:last-child { border-right: none; }
         tr:nth-child(even) td { background-color: #fff9c4 !important; }
-        .price-col { color: #1b5e20; }
-        .reward-col { color: var(--lucky-red); font-size: 1.05rem; font-weight: 900; }
+        
+        /* 核心金额放大且恢复原始红绿配色 */
+        .price-col { 
+            color: #1b5e20 !important; 
+            font-size: 1.6rem !important; 
+            font-weight: 900;
+            font-family: 'Arial Black', sans-serif;
+        }
+        .reward-col { 
+            color: var(--lucky-red) !important; 
+            font-size: 1.7rem !important; 
+            font-weight: 900; 
+            font-family: 'Arial Black', sans-serif;
+        }
 
-        /* ==================== 打印/导出PDF 专属优化 ==================== */
+        /* ==================== 打印导出优化 ==================== */
         @media print {
-            body {
-                background: #ffffff !important; /* 强制外围背景变白，消除黑边 */
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-            .bottom-nav {
-                display: none !important; /* 打印时自动隐藏底部导航栏 */
-            }
-            .poster-container {
-                box-shadow: none !important; /* 去除阴影，让边缘更干净 */
-                margin: 0 auto 20px auto !important;
-                page-break-inside: avoid; /* 尽量防止一个模块被从中间切断 */
-            }
+            body { background: #ffffff !important; padding: 0 !important; margin: 0 !important; }
+            .poster-container { box-shadow: none !important; margin: 0 auto !important; max-width: 100% !important; border-radius: 0 !important; border: none !important; padding: 10px !important;}
+            @page { margin: 0; }
         }
     </style>
 </head>
@@ -177,87 +199,91 @@
     <div class="poster-container">
 
         <div class="header-title">
-            <h1>福彩3D 胆拖玩法明细</h1>
+            <h1>福彩<span class="highlight-3d">3D</span>胆拖玩法明细</h1>
         </div>
 
-        <div class="section-card">
-            <div class="section-header">单选全胆拖</div>
-            <div class="rule-container">
-                <div class="rule-explanation">【 含对子 】</div>
+        <div class="main-card">
+            
+            <div class="play-block">
+                <div class="section-title-row">
+                    <span class="clean-title">单选全胆拖</span>
+                    <span class="block-rule">【 含对子 】</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">单选奖金(元)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1胆全拖</td><td class="price-col">542</td><td class="reward-col">1040</td></tr>
+                        <tr><td>2胆全拖</td><td class="price-col">108</td><td class="reward-col">1040</td></tr>
+                    </tbody>
+                </table>
             </div>
-            <table>
-                <thead>
-                    <tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">单选奖金(元)</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>1胆全拖</td><td class="price-col">542</td><td class="reward-col">1040</td></tr>
-                    <tr><td>2胆全拖</td><td class="price-col">108</td><td class="reward-col">1040</td></tr>
-                </tbody>
-            </table>
-        </div>
 
-        <div class="section-card">
-            <div class="section-header">单选单胆拖</div>
-            <div class="rule-container">
-                <div class="rule-explanation">【 不含对子 】</div>
+            <div class="play-block">
+                <div class="section-title-row">
+                    <span class="clean-title">单选单胆拖</span>
+                    <span class="block-rule">【 不含对子 】</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">单选奖金(元)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1胆全拖</td><td class="price-col">432</td><td class="reward-col">1040</td></tr>
+                        <tr><td>2胆全拖</td><td class="price-col">96</td><td class="reward-col">1040</td></tr>
+                    </tbody>
+                </table>
             </div>
-            <table>
-                <thead>
-                    <tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">单选奖金(元)</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>1胆全拖</td><td class="price-col">432</td><td class="reward-col">1040</td></tr>
-                    <tr><td>2胆全拖</td><td class="price-col">96</td><td class="reward-col">1040</td></tr>
-                </tbody>
-            </table>
-        </div>
 
-        <div class="section-card">
-            <div class="section-header">单选双胆拖</div>
-            <div class="rule-container">
-                <div class="rule-explanation">【 即是对子 不含3个号不同 】</div>
+            <div class="play-block">
+                <div class="section-title-row">
+                    <span class="clean-title">单选双胆拖</span>
+                    <span class="block-rule">【 即是对子 不含3不同 】</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">单选奖金(元)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1胆全拖</td><td class="price-col">108</td><td class="reward-col">1040</td></tr>
+                        <tr><td>2胆全拖</td><td class="price-col">48</td><td class="reward-col">1040</td></tr>
+                    </tbody>
+                </table>
             </div>
-            <table>
-                <thead>
-                    <tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">单选奖金(元)</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>1胆全拖</td><td class="price-col">108</td><td class="reward-col">1040</td></tr>
-                    <tr><td>2胆全拖</td><td class="price-col">48</td><td class="reward-col">1040</td></tr>
-                </tbody>
-            </table>
-        </div>
 
-        <div class="section-card">
-            <div class="section-header">组选六</div>
-            <div class="rule-container">
-                <div class="rule-explanation">【 即是三个号码不同 】</div>
+            <div class="play-block">
+                <div class="section-title-row">
+                    <span class="clean-title">组选六</span>
+                    <span class="block-rule">【 即三个号码不同 】</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">组六奖金(元)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1胆全拖</td><td class="price-col">72</td><td class="reward-col">173</td></tr>
+                        <tr><td>2胆全拖</td><td class="price-col">16</td><td class="reward-col">173</td></tr>
+                    </tbody>
+                </table>
             </div>
-            <table>
-                <thead>
-                    <tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">组六奖金(元)</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>1胆全拖</td><td class="price-col">72</td><td class="reward-col">173</td></tr>
-                    <tr><td>2胆全拖</td><td class="price-col">16</td><td class="reward-col">173</td></tr>
-                </tbody>
-            </table>
-        </div>
 
-        <div class="section-card" style="margin-bottom: 2px;">
-            <div class="section-header">组选三</div>
-            <div class="rule-container">
-                <div class="rule-explanation">【 即是对子 不含3个号不同 】</div>
+            <div class="play-block">
+                <div class="section-title-row">
+                    <span class="clean-title">组选三</span>
+                    <span class="block-rule">【 即是对子 不含3不同 】</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">组三奖金(元)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1胆全拖</td><td class="price-col">36</td><td class="reward-col">346</td></tr>
+                        <tr><td>2胆全拖</td><td class="price-col">18</td><td class="reward-col">346</td></tr>
+                    </tbody>
+                </table>
             </div>
-            <table>
-                <thead>
-                    <tr><th width="34%">胆拖玩法</th><th width="33%">投入(元)</th><th width="33%">组三奖金(元)</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>1胆全拖</td><td class="price-col">36</td><td class="reward-col">346</td></tr>
-                    <tr><td>2胆全拖</td><td class="price-col">18</td><td class="reward-col">346</td></tr>
-                </tbody>
-            </table>
+
         </div>
 
     </div>
